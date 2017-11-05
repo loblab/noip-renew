@@ -23,7 +23,7 @@ function deploy() {
     grep "noip-renew.sh" /etc/crontab || echo "$CRONJOB" | sudo tee -a /etc/crontab
     echo "Done."
     echo "Please confirm the account info in <$DSTDIR/noip-renew.sh>"
-    echo "Also check logs in <$LOGDIR> after running noip-renew.sh"
+    echo "Also check logs in <$LOGDIR> after running the cron job"
 }
 
 install
