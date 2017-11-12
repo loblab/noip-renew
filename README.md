@@ -28,5 +28,6 @@ You can also check [DNS-O-Matic](https://dnsomatic.com/) to update multiple noip
 
 ## History
 
+- 0.2 (11/12/2017): Deploy the script as normal user only. root user with 'no-sandbox' option is not safe for Chrome.
 - 0.1 (11/5/2017) : Supported Debian with Chrome headless.
 

@@ -1,10 +1,26 @@
 #!/bin/bash
 set -e
 
-LOGDIR=/var/log/noip-renew
-DSTFILE=/etc/cron.weekly/noip-renew
-CRONJOB="45 6    * * 3   root    $DSTFILE"
-[ "$(whoami)" == "root" ] || SUDO=sudo
+USER=$(whoami)
+if [ "$USER" == "root" ]; then
+    USER=$1
+    if [ -z "$USER" ]; then
+        echo "Chrome is safer to run as normal user instead of 'root', so"
+        echo "run the script as a normal user (with sudo permission), "
+        echo "or specify the user: $0 <user>"
+        exit 1
+    fi
+    HOME=/home/$USER
+else
+    SUDO=sudo
+fi
+
+function config() {
+    LOGDIR=/var/log/noip-renew/$USER
+    INSTDIR=/usr/local/bin
+    INSTEXE=$INSTDIR/noip-renew-$USER
+    CRONJOB="45 3    * * 3,6   $USER    $INSTEXE $LOGDIR"
+}
 
 function install() {
     echo "Install necessary packages..."
@@ -18,15 +34,18 @@ function install() {
 function deploy() {
     echo "Deploy the script (run twice every week)..."
     $SUDO mkdir -p $LOGDIR
-    $SUDO cp noip-renew.py /usr/local/bin/
-    $SUDO cp noip-renew.sh $DSTFILE
-    $SUDO chmod 700 $DSTFILE
+    $SUDO chown $USER $LOGDIR
+    $SUDO cp noip-renew.py $INSTDIR
+    $SUDO cp noip-renew.sh $INSTEXE
+    $SUDO chown $USER $INSTEXE
+    $SUDO chmod 700 $INSTEXE
     $SUDO sed -i '/noip-renew/d' /etc/crontab
     echo "$CRONJOB" | $SUDO tee -a /etc/crontab
     echo "Done."
-    echo "Please confirm the account info in '$DSTFILE'"
+    echo "Please confirm the account info in '$INSTEXE'"
     echo "Also check logs in '$LOGDIR' after running the cron job"
 }
 
+config
 install
 deploy
