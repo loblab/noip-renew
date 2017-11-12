@@ -27,6 +27,7 @@ class Robot:
         self.debug = debug
         options = webdriver.ChromeOptions()
         options.add_argument("headless")
+        options.add_argument("no-sandbox")
         options.add_argument("window-size=1200x800")
         self.browser = webdriver.Chrome(chrome_options=options)
         self.browser.set_page_load_timeout(30)
