@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # Copyright 2017 loblab
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,6 +14,7 @@
 # limitations under the License.
 
 from selenium import webdriver
+from selenium.common.exceptions import TimeoutException
 import time
 import sys
  
@@ -27,8 +28,9 @@ class Robot:
         self.debug = debug
         options = webdriver.ChromeOptions()
         options.add_argument("headless")
-        # To run Chrome as root, use 'no-sandbox' option, but it is not safe
-        #options.add_argument("no-sandbox")
+        #options.add_argument("privileged")
+        #options.add_argument("disable-gpu")
+        options.add_argument("no-sandbox")  # need when run in docker
         options.add_argument("window-size=1200x800")
         self.browser = webdriver.Chrome(chrome_options=options)
         self.browser.set_page_load_timeout(30)
@@ -64,7 +66,11 @@ class Robot:
 
     def update_hosts(self):
         self.log_msg("Open %s..." % Robot.HOST_URL)
-        self.browser.get(Robot.HOST_URL)
+        try:
+            self.browser.get(Robot.HOST_URL)
+        except TimeoutException as e:
+            self.browser.save_screenshot("timeout.png")
+            self.log_msg("Timeout. Try to ignore")
         invalid = True
         retry = 5
         while retry > 0:
@@ -75,6 +81,7 @@ class Robot:
             if count + len(buttons_done) == Robot.NUM_HOSTS:
                 invalid = False
                 break
+            self.log_msg("Cannot find the buttons", 2)
             retry -= 1
         if invalid:
             self.log_msg("Invalid page or something wrong. See error.png", 2)
@@ -98,6 +105,7 @@ class Robot:
                 rc = 3
         except Exception as e:
             self.log_msg(str(e), 2)
+            self.browser.save_screenshot("exception.png")
             rc = 2
         finally:
             self.browser.quit()

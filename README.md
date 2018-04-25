@@ -4,10 +4,10 @@
 This script auto click web pages to renew the hosts,
 using Python/Selenium with Chrome headless mode.
 
-- Platform: Debian/Ubuntu Linux, no GUI needed (tested on Debian 9.2)
-- Ver: 0.1
+- Platform: Debian/Ubuntu Linux, no GUI needed (tested on Debian 9.x); python 2.x/3.x
+- Ver: 0.3
 - Ref: [Technical explanation for the code (Chinese)](http://www.jianshu.com/p/3c8196175147)
-- Updated: 11/12/2017
+- Updated: 4/25/2018
 - Created: 11/4/2017
 - Author: loblab
 
@@ -28,6 +28,7 @@ You can also check [DNS-O-Matic](https://dnsomatic.com/) to update multiple noip
 
 ## History
 
+- 0.3 (4/25/2018): Support Docker, ignore timeout, tested on python3.
 - 0.2 (11/12/2017): Deploy the script as normal user only. root user with 'no-sandbox' option is not safe for Chrome.
-- 0.1 (11/5/2017) : Supported Debian with Chrome headless.
+- 0.1 (11/5/2017): Supported Debian with Chrome headless.
 
