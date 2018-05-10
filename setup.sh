@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 
+PYTHON=python3
 USER=$(whoami)
 if [ "$USER" == "root" ]; then
     USER=$1
@@ -19,7 +20,7 @@ function config() {
     LOGDIR=/var/log/noip-renew/$USER
     INSTDIR=/usr/local/bin
     INSTEXE=$INSTDIR/noip-renew-$USER
-    CRONJOB="45 3    * * 3,6   $USER    $INSTEXE $LOGDIR"
+    CRONJOB="45 3    * * 1,3,5   $USER    $INSTEXE $LOGDIR"
 }
 
 function install() {
@@ -27,8 +28,8 @@ function install() {
     $SUDO apt -y install chromedriver
     # Debian9 package 'python-selenium' does not work with chromedriver,
     # Install from pip, which is newer
-    $SUDO apt -y install python-pip
-    $SUDO pip install selenium
+    $SUDO apt -y install $PYTHON-pip
+    $SUDO $PYTHON -m pip install selenium
 }
 
 function deploy() {

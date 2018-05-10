@@ -7,7 +7,7 @@ using Python/Selenium with Chrome headless mode.
 - Platform: Debian/Ubuntu Linux, no GUI needed (tested on Debian 9.x); python 2.x/3.x
 - Ver: 0.3
 - Ref: [Technical explanation for the code (Chinese)](http://www.jianshu.com/p/3c8196175147)
-- Updated: 4/25/2018
+- Updated: 5/10/2018
 - Created: 11/4/2017
 - Author: loblab
 
