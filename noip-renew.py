@@ -17,6 +17,7 @@ from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
 import time
 import sys
+import os
  
 class Robot:
 
@@ -32,8 +33,10 @@ class Robot:
         #options.add_argument("disable-gpu")
         options.add_argument("no-sandbox")  # need when run in docker
         options.add_argument("window-size=1200x800")
+        if 'https_proxy' in os.environ:
+            options.add_argument("proxy-server=" + os.environ['https_proxy'])
         self.browser = webdriver.Chrome(chrome_options=options)
-        self.browser.set_page_load_timeout(30)
+        self.browser.set_page_load_timeout(60)
 
     def log_msg(self, msg, level=None):
         tstr = time.strftime('%Y/%m/%d %H:%M:%S', time.localtime(time.time()))
