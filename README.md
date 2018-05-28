@@ -21,14 +21,15 @@ using Python/Selenium with Chrome headless mode.
 
 ## Remarks
 
-The script is not designed to renew/update the dynamic DNS recrods.
+The script is not designed to renew/update the dynamic DNS records.
 Check [noip.com document](https://www.noip.com/integrate) for that purpose.
 And most wireless routers support noip.com.
-You can also check [DNS-O-Matic](https://dnsomatic.com/) to update multiple noip.com DNS recrods.
+You can also check [DNS-O-Matic](https://dnsomatic.com/) to update multiple noip.com DNS records.
+
+There is no chromedriver on Raspberry Pi by default. You may need to install it manually for Pi.
 
 ## History
 
 - 0.3 (5/19/2018): Support Docker, ignore timeout, support proxy, tested on python3.
 - 0.2 (11/12/2017): Deploy the script as normal user only. root user with 'no-sandbox' option is not safe for Chrome.
 - 0.1 (11/5/2017): Supported Debian with Chrome headless.
-
