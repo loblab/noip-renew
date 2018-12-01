@@ -23,7 +23,7 @@ class Robot:
 
     LOGIN_URL = "https://www.noip.com/login"
     HOST_URL = "https://my.noip.com/#!/dynamic-dns"
-    NUM_HOSTS = 3
+    NUM_HOSTS = num_hosts
 
     def __init__(self, debug=0):
         self.debug = debug
@@ -79,7 +79,7 @@ class Robot:
         while retry > 0:
             time.sleep(1)
             buttons_todo = self.browser.find_elements_by_xpath(Robot.xpath_of_button('btn-confirm'))
-            buttons_done = self.browser.find_elements_by_xpath(Robot.xpath_of_button('btn-manage'))
+            buttons_done = self.browser.find_elements_by_xpath(Robot.xpath_of_button('btn-configure'))
             count = len(buttons_todo)
             if count + len(buttons_done) == Robot.NUM_HOSTS:
                 invalid = False
@@ -117,15 +117,16 @@ class Robot:
 def main(argv=None):
     if argv is None:
         argv = sys.argv
-    if len(argv) < 3:
-        print("Usage: %s <username> <password> [<debug-level>]" % argv[0])
+    if len(argv) < 4:
+        print("Usage: %s <username> <password> <num-hosts> [<debug-level>]" % argv[0])
         return 1
 
     username = argv[1]
     password = argv[2]
+    num_hosts = argv[3]
     debug = 1
-    if len(argv) > 3:
-        debug = int(argv[3])
+    if len(argv) > 4:
+        debug = int(argv[4])
 
     robot = Robot(debug)
     return robot.run(username, password)
