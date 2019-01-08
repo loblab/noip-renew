@@ -1,12 +1,12 @@
 #!/usr/bin/python3
 # Copyright 2017 loblab
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #       http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,9 +18,10 @@ from selenium.common.exceptions import TimeoutException
 import time
 import sys
 import os
- 
+
 class Robot:
 
+    USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:64.0) Gecko/20100101 Firefox/64.0"
     LOGIN_URL = "https://www.noip.com/login"
     HOST_URL = "https://my.noip.com/#!/dynamic-dns"
     NUM_HOSTS = 3
@@ -33,6 +34,7 @@ class Robot:
         #options.add_argument("disable-gpu")
         options.add_argument("no-sandbox")  # need when run in docker
         options.add_argument("window-size=1200x800")
+        options.add_argument("user-agent=%s" % Robot.USER_AGENT)
         if 'https_proxy' in os.environ:
             options.add_argument("proxy-server=" + os.environ['https_proxy'])
         self.browser = webdriver.Chrome(chrome_options=options)
@@ -50,7 +52,7 @@ class Robot:
         self.browser.get(Robot.LOGIN_URL)
         if self.debug > 1:
             self.browser.save_screenshot("debug1.png")
- 
+
         self.log_msg("Login...")
         ele_usr = self.browser.find_element_by_name("username")
         ele_pwd = self.browser.find_element_by_name("password")
@@ -65,7 +67,7 @@ class Robot:
 
     @staticmethod
     def xpath_of_button(cls_name):
-        return "//button[contains(@class, '%s')]" % cls_name 
+        return "//button[contains(@class, '%s')]" % cls_name
 
     def update_hosts(self):
         self.log_msg("Open %s..." % Robot.HOST_URL)
@@ -79,7 +81,7 @@ class Robot:
         while retry > 0:
             time.sleep(1)
             buttons_todo = self.browser.find_elements_by_xpath(Robot.xpath_of_button('btn-confirm'))
-            buttons_done = self.browser.find_elements_by_xpath(Robot.xpath_of_button('btn-manage'))
+            buttons_done = self.browser.find_elements_by_xpath(Robot.xpath_of_button('btn-configure'))
             count = len(buttons_todo)
             if count + len(buttons_done) == Robot.NUM_HOSTS:
                 invalid = False
