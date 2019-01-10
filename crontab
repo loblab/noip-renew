@@ -1,0 +1,5 @@
+# Add this line to your crontab
+
+# m h dom mon dow user	command
+12 3	* * 1,3,5 loblab   docker exec loblab-selenium /noip-renew/noip-renew.sh /var/log/selenium
+

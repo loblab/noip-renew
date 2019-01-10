@@ -9,6 +9,6 @@ if [ -z "$LOGDIR" ]; then
     ./noip-renew.py "$USERNAME" "$PASSWORD" 2
 else
     cd $LOGDIR
-    noip-renew.py "$USERNAME" "$PASSWORD" 0 >> log
+    noip-renew.py "$USERNAME" "$PASSWORD" 0 >> $USERNAME.log
 fi
 
