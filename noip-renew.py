@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python
 # Copyright 2017 loblab
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +24,6 @@ class Robot:
     USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:64.0) Gecko/20100101 Firefox/64.0"
     LOGIN_URL = "https://www.noip.com/login"
     HOST_URL = "https://my.noip.com/#!/dynamic-dns"
-    NUM_HOSTS = 3
 
     def __init__(self, debug=0):
         self.debug = debug
@@ -69,7 +68,7 @@ class Robot:
     def xpath_of_button(cls_name):
         return "//button[contains(@class, '%s')]" % cls_name
 
-    def update_hosts(self):
+    def update_hosts(self, num_hosts):
         self.log_msg("Open %s..." % Robot.HOST_URL)
         try:
             self.browser.get(Robot.HOST_URL)
@@ -83,7 +82,7 @@ class Robot:
             buttons_todo = self.browser.find_elements_by_xpath(Robot.xpath_of_button('btn-confirm'))
             buttons_done = self.browser.find_elements_by_xpath(Robot.xpath_of_button('btn-configure'))
             count = len(buttons_todo)
-            if count + len(buttons_done) == Robot.NUM_HOSTS:
+            if count + len(buttons_done) == num_hosts:
                 invalid = False
                 break
             self.log_msg("Cannot find the buttons", 2)
@@ -102,11 +101,11 @@ class Robot:
         self.log_msg("Confirmed hosts: %d" % count, 2)
         return True
 
-    def run(self, username, password):
+    def run(self, username, password, num_hosts):
         rc = 0
         try:
             self.login(username, password)
-            if not self.update_hosts():
+            if not self.update_hosts(num_hosts):
                 rc = 3
         except Exception as e:
             self.log_msg(str(e), 2)
@@ -119,18 +118,19 @@ class Robot:
 def main(argv=None):
     if argv is None:
         argv = sys.argv
-    if len(argv) < 3:
-        print("Usage: %s <username> <password> [<debug-level>]" % argv[0])
+    if len(argv) < 4:
+        print("Usage: %s <username> <password> <num-hosts> [<debug-level>]" % argv[0])
         return 1
 
     username = argv[1]
     password = argv[2]
+    num_hosts = int(argv[3])
     debug = 1
-    if len(argv) > 3:
-        debug = int(argv[3])
+    if len(argv) > 4:
+        debug = int(argv[4])
 
     robot = Robot(debug)
-    return robot.run(username, password)
+    return robot.run(username, password, num_hosts)
 
 if __name__ == "__main__":
     sys.exit(main())
