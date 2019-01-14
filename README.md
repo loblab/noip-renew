@@ -19,6 +19,8 @@ using Python/Selenium with Chrome headless mode.
 2. Run setup.sh,
 3. Run noip-renew.sh, check result.png (if succeeded) or error.png (if failed)
 
+For docker users, check Dockerfile, docker-compose.yml, crontab.
+
 ## Remarks
 
 The script is not designed to renew/update the dynamic DNS records.
@@ -33,4 +35,4 @@ There is no chromedriver on Raspberry Pi by default. You may need to install it 
 - 0.4 (12/01/2018): added num_hosts parameter, fixed modify button label
 - 0.3 (5/19/2018): Support Docker, ignore timeout, support proxy, tested on python3.
 - 0.2 (11/12/2017): Deploy the script as normal user only. root user with 'no-sandbox' option is not safe for Chrome.
-- 0.1 (11/5/2017): Supported Debian with Chrome headless.
+- 0.1 (11/5/2017): Support Debian with Chrome headless.
