@@ -27,6 +27,7 @@ class Robot:
 
     def __init__(self, debug=0):
         self.debug = debug
+        self.log_msg("Debug level: %d" % debug)
         options = webdriver.ChromeOptions()
         options.add_argument("headless")
         #options.add_argument("privileged")
