@@ -27,7 +27,6 @@ class Robot:
 
     def __init__(self, debug=0):
         self.debug = debug
-        self.log_msg("Debug level: %d" % debug)
         options = webdriver.ChromeOptions()
         options.add_argument("headless")
         #options.add_argument("privileged")
@@ -45,7 +44,7 @@ class Robot:
         if level is None:
             level = self.debug
         if level > 0:
-            print("%s - %s" % (tstr, msg))
+            print("%s [%s] - %s" % (tstr, self.username, msg))
 
     def login(self, username, password):
         self.log_msg("Open %s..." % Robot.LOGIN_URL)
@@ -104,6 +103,8 @@ class Robot:
 
     def run(self, username, password, num_hosts):
         rc = 0
+        self.username = username
+        self.log_msg("Debug level: %d" % self.debug)
         try:
             self.login(username, password)
             if not self.update_hosts(num_hosts):
