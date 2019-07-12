@@ -25,7 +25,7 @@ function config() {
 
 function install() {
     echo "Install necessary packages..."
-    $SUDO apt -y install chromedriver
+    $SUDO apt -y install chromium-chromedriver
     # Debian9 package 'python-selenium' does not work with chromedriver,
     # Install from pip, which is newer
     $SUDO apt -y install $PYTHON-pip
