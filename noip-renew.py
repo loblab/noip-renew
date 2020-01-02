@@ -28,6 +28,10 @@ class Robot:
     def __init__(self, debug=0):
         self.debug = debug
         options = webdriver.ChromeOptions()
+        
+        #added for Raspbian Buster 4.0+ versions. Check https://www.raspberrypi.org/forums/viewtopic.php?t=258019 for reference.
+        options.add_argument('--disable-features=VizDisplayCompositor')
+        
         options.add_argument("headless")
         #options.add_argument("privileged")
         #options.add_argument("disable-gpu")
