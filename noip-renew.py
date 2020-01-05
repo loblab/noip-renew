@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # Copyright 2017 loblab
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,10 +28,10 @@ class Robot:
     def __init__(self, debug=0):
         self.debug = debug
         options = webdriver.ChromeOptions()
-        
+
         #added for Raspbian Buster 4.0+ versions. Check https://www.raspberrypi.org/forums/viewtopic.php?t=258019 for reference.
-        options.add_argument('--disable-features=VizDisplayCompositor')
-        
+        options.add_argument("disable-features=VizDisplayCompositor")
+
         options.add_argument("headless")
         #options.add_argument("privileged")
         #options.add_argument("disable-gpu")
@@ -40,7 +40,7 @@ class Robot:
         options.add_argument("user-agent=%s" % Robot.USER_AGENT)
         if 'https_proxy' in os.environ:
             options.add_argument("proxy-server=" + os.environ['https_proxy'])
-        self.browser = webdriver.Chrome(chrome_options=options)
+        self.browser = webdriver.Chrome(options=options)
         self.browser.set_page_load_timeout(60)
 
     def log_msg(self, msg, level=None):
