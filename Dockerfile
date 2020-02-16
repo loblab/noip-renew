@@ -19,7 +19,6 @@ RUN apt-get -y install ${PYTHON}-pip
 RUN $PYTHON -m pip install selenium
 RUN apt-get -y install curl wget
 
-RUN useradd -d $HOME -u $UID $USER
 USER $USER
 WORKDIR $HOME
 CMD ["bash"]

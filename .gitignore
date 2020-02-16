@@ -99,5 +99,3 @@ ENV/
 
 # mypy
 .mypy_cache/
-
-noip-renew.sh
