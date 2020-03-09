@@ -28,6 +28,7 @@ function install() {
     $SUDO apt -y install chromium-chromedriver || \
       $SUDO apt -y install chromium-driver || \
       $SUDO apt -y install chromedriver
+    $SUDO apt -y install chromium-browser # Update chromium-browser or the script will not work.
     # Debian9 package 'python-selenium' does not work with chromedriver,
     # Install from pip, which is newer
     $SUDO apt -y install $PYTHON-pip
