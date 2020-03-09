@@ -59,7 +59,6 @@ class Robot:
         ele_pwd = self.browser.find_element_by_name("password")
         ele_usr.send_keys(username)
         ele_pwd.send_keys(password)
-        self.log_msg("user & pass entered")
         form = self.browser.find_element_by_id("clogs")
         form.submit() # This takes a while.
         if self.debug > 1:
@@ -68,8 +67,7 @@ class Robot:
 
     @staticmethod
     def xpath_of_button(cls_name):
-        self.log_msg("class name: {}".format(cls_name))
-        return "//button[contains(@class, '%s')]" % cls_name
+        return "//button[contains(@class, '{}')]".format(cls_name)
 
     def update_hosts(self, num_hosts):
         self.log_msg("Opening {}...".format(Robot.HOST_URL))
@@ -78,20 +76,19 @@ class Robot:
         except TimeoutException as e:
             self.browser.save_screenshot("timeout.png")
             self.log_msg("Timeout. Try to ignore")
+        self.log_msg("Updating hosts...")
         invalid = True
         retry = 5
         while retry > 0:
-            self.log_msg("reached the retry bit - {}".format(retry))
             time.sleep(1)
             buttons_todo = self.browser.find_elements_by_xpath(Robot.xpath_of_button('btn-confirm'))
             buttons_done = self.browser.find_elements_by_xpath(Robot.xpath_of_button('btn-configure'))
             count = len(buttons_todo)
             total = len(buttons_done)
-            self.log_msg("count: {} \| total: {}".format(count, total))
             if count + total == num_hosts:
                 invalid = False
                 break
-            self.log_msg("Cannot find the buttons", 2)
+            self.log_msg("Unable to find the renew buttons...", 2)
             retry -= 1
         if invalid:
             self.log_msg("Invalid page or something wrong. See error.png", 2)
@@ -99,12 +96,12 @@ class Robot:
             return False
         if self.debug > 1:
             self.browser.save_screenshot("debug3.png")
-        self.log_msg("Hosts to be confirmed: {} / {}".format(count, total))
+        self.log_msg("Hosts to be confirmed: {}/{}".format(count, total))
         for button in buttons_todo:
             button.click()
             time.sleep(1)
         self.browser.save_screenshot("result.png")
-        self.log_msg("Confirmed hosts: {} / {}".format(count, total), 2)
+        self.log_msg("Confirmed hosts: {}/{}".format(count, total), 2)
         return True
 
     def run(self, username, password, num_hosts):
@@ -112,11 +109,8 @@ class Robot:
         self.username = username
         self.log_msg("Debug level: {}".format(self.debug))
         try:
-            self.log_msg("Trying to 'self.login()'")
             self.login(username, password)
-            self.log_msg("now checks if self.update_hosts(number) is true or false")
             if not self.update_hosts(num_hosts):
-                self.log_msg("if not, set rc to 3")
                 rc = 3
         except Exception as e:
             self.log_msg("Exception: {}".format(str(e)), 2)
@@ -127,10 +121,9 @@ class Robot:
         return rc
 
 def main(argv=None):
-    
+
     if argv is None:
         argv = sys.argv
-        
     if len(argv) < 4:
         print("Usage: {} <username> <password> <num-hosts> [<debug-level>]".format(argv[0]))
         return 1
@@ -139,7 +132,7 @@ def main(argv=None):
     password = argv[2]
     num_hosts = int(argv[3])
     debug = 1
-    
+
     if len(argv) > 4:
         debug = int(argv[4])
 
@@ -148,4 +141,3 @@ def main(argv=None):
 
 if __name__ == "__main__":
     sys.exit(main())
-
