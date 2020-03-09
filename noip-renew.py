@@ -61,11 +61,9 @@ class Robot:
         ele_pwd.send_keys(password)
         self.log_msg("user & pass entered")
         form = self.browser.find_element_by_id("clogs")
-        form.submit()
+        form.submit() # This takes a while.
         if self.debug > 1:
-            self.log_msg("debug = {}".format(self.debug))
             time.sleep(1)
-            self.log_msg("sleep over")
             self.browser.save_screenshot("debug2.png")
 
     @staticmethod
@@ -89,7 +87,7 @@ class Robot:
             buttons_done = self.browser.find_elements_by_xpath(Robot.xpath_of_button('btn-configure'))
             count = len(buttons_todo)
             total = len(buttons_done)
-            self.log_msg("count: {} | total: {}".format(count, total))
+            self.log_msg("count: {} \| total: {}".format(count, total))
             if count + total == num_hosts:
                 invalid = False
                 break
@@ -121,18 +119,18 @@ class Robot:
                 self.log_msg("if not, set rc to 3")
                 rc = 3
         except Exception as e:
-            self.log_msg(str(e), 2)
-            self.log_msg("Exception...")
+            self.log_msg("Exception: {}".format(str(e)), 2)
             self.browser.save_screenshot("exception.png")
             rc = 2
         finally:
             self.browser.quit()
-            self.log_msg(rc)
         return rc
 
 def main(argv=None):
+    
     if argv is None:
         argv = sys.argv
+        
     if len(argv) < 4:
         print("Usage: {} <username> <password> <num-hosts> [<debug-level>]".format(argv[0]))
         return 1
@@ -141,6 +139,7 @@ def main(argv=None):
     password = argv[2]
     num_hosts = int(argv[3])
     debug = 1
+    
     if len(argv) > 4:
         debug = int(argv[4])
 
