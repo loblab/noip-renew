@@ -61,17 +61,16 @@ class Robot:
         ele_pwd.send_keys(password)
         self.log_msg("user & pass entered")
         form = self.browser.find_element_by_id("clogs")
-        self.log_msg(form)
         form.submit()
         if self.debug > 1:
-            self.log_msg("debug = " self.debug)
+            self.log_msg("debug = {}".format(self.debug))
             time.sleep(1)
             self.log_msg("sleep over")
             self.browser.save_screenshot("debug2.png")
 
     @staticmethod
     def xpath_of_button(cls_name):
-        self.log_msg(cls_name)
+        self.log_msg("class name: {}".format(cls_name))
         return "//button[contains(@class, '%s')]" % cls_name
 
     def update_hosts(self, num_hosts):
@@ -115,15 +114,20 @@ class Robot:
         self.username = username
         self.log_msg("Debug level: {}".format(self.debug))
         try:
+            self.log_msg("Trying to 'self.login()'")
             self.login(username, password)
+            self.log_msg("now checks if self.update_hosts(number) is true or false")
             if not self.update_hosts(num_hosts):
+                self.log_msg("if not, set rc to 3")
                 rc = 3
         except Exception as e:
             self.log_msg(str(e), 2)
+            self.log_msg("Exception...")
             self.browser.save_screenshot("exception.png")
             rc = 2
         finally:
             self.browser.quit()
+            self.log_msg(rc)
         return rc
 
 def main(argv=None):
