@@ -39,7 +39,7 @@ class Robot:
         if 'https_proxy' in os.environ:
             options.add_argument("proxy-server=" + os.environ['https_proxy'])
         self.browser = webdriver.Chrome(options=options)
-        self.browser.set_page_load_timeout(30)
+        self.browser.set_page_load_timeout(60)
 
     def log_msg(self, msg, level=None):
         tstr = time.strftime('%Y/%m/%d %H:%M:%S', time.localtime(time.time()))
