@@ -39,7 +39,7 @@ class Robot:
         if 'https_proxy' in os.environ:
             options.add_argument("proxy-server=" + os.environ['https_proxy'])
         self.browser = webdriver.Chrome(options=options)
-        self.browser.set_page_load_timeout(60)
+        self.browser.set_page_load_timeout(90) # Current timeout is 90 seconds.
 
     def log_msg(self, msg, level=None):
         tstr = time.strftime('%Y/%m/%d %H:%M:%S', time.localtime(time.time()))
@@ -83,9 +83,10 @@ class Robot:
             time.sleep(1)
             buttons_todo = self.browser.find_elements_by_xpath(Robot.xpath_of_button('btn-confirm'))
             buttons_done = self.browser.find_elements_by_xpath(Robot.xpath_of_button('btn-configure'))
-            count = len(buttons_todo)
-            total = len(buttons_done)
-            if count + total == num_hosts:
+            todoCount = len(buttons_todo)
+            doneCount = len(buttons_done)
+            total = todoCount + doneCount
+            if todoCount + doneCount == num_hosts:
                 invalid = False
                 break
             self.log_msg("Unable to find the renew buttons...", 2)
@@ -96,12 +97,12 @@ class Robot:
             return False
         if self.debug > 1:
             self.browser.save_screenshot("debug3.png")
-        self.log_msg(f"Hosts to be confirmed: {count}/{total}")
+        self.log_msg(f"Hosts to be confirmed: {todoCount}/{total}")
         for button in buttons_todo:
             button.click()
             time.sleep(1)
         self.browser.save_screenshot("result.png")
-        self.log_msg(f"Confirmed hosts: {count}/{total}", 2)
+        self.log_msg(f"Total Confirmed hosts: {todoCount}/{total}", 2)
         return True
 
     def run(self, username, password, num_hosts):
