@@ -35,7 +35,7 @@ class Robot:
         options.add_argument("headless")
         options.add_argument("no-sandbox")  # need when run in docker
         options.add_argument("window-size=1200x800")
-        options.add_argument("user-agent={}".format(Robot.USER_AGENT))
+        options.add_argument(f"user-agent={Robot.USER_AGENT}")
         if 'https_proxy' in os.environ:
             options.add_argument("proxy-server=" + os.environ['https_proxy'])
         self.browser = webdriver.Chrome(options=options)
@@ -46,10 +46,10 @@ class Robot:
         if level is None:
             level = self.debug
         if level > 0:
-            print("{} [{}] - {}".format(tstr, self.username, msg))
+            print(f"{tstr} [{self.username}] - {msg}")
 
     def login(self, username, password):
-        self.log_msg("Opening {}...".format(Robot.LOGIN_URL))
+        self.log_msg(f"Opening {Robot.LOGIN_URL}...")
         self.browser.get(Robot.LOGIN_URL)
         if self.debug > 1:
             self.browser.save_screenshot("debug1.png")
@@ -67,10 +67,10 @@ class Robot:
 
     @staticmethod
     def xpath_of_button(cls_name):
-        return "//button[contains(@class, '{}')]".format(cls_name)
+        return f"//button[contains(@class, '{cls_name}')]"
 
     def update_hosts(self, num_hosts):
-        self.log_msg("Opening {}...".format(Robot.HOST_URL))
+        self.log_msg(f"Opening {Robot.HOST_URL}...")
         try:
             self.browser.get(Robot.HOST_URL)
         except TimeoutException as e:
@@ -96,18 +96,18 @@ class Robot:
             return False
         if self.debug > 1:
             self.browser.save_screenshot("debug3.png")
-        self.log_msg("Hosts to be confirmed: {}/{}".format(count, total))
+        self.log_msg(f"Hosts to be confirmed: {count}/{total}")
         for button in buttons_todo:
             button.click()
             time.sleep(1)
         self.browser.save_screenshot("result.png")
-        self.log_msg("Confirmed hosts: {}/{}".format(count, total), 2)
+        self.log_msg(f"Confirmed hosts: {count}/{total}", 2)
         return True
 
     def run(self, username, password, num_hosts):
         rc = 0
         self.username = username
-        self.log_msg("Debug level: {}".format(self.debug))
+        self.log_msg(f"Debug level: {self.debug}")
         try:
             self.login(username, password)
             if not self.update_hosts(num_hosts):
@@ -125,7 +125,7 @@ def main(argv=None):
     if argv is None:
         argv = sys.argv
     if len(argv) < 4:
-        print("Usage: {} <username> <password> <num-hosts> [<debug-level>]".format(argv[0]))
+        print(f"Usage: {argv[0]} <username> <password> <num-hosts> [<debug-level>]")
         return 1
 
     username = argv[1]
