@@ -69,7 +69,9 @@ class Robot:
     def xpath_of_button(cls_name):
         return f"//button[contains(@class, '{cls_name}')]"
 
-    def update_hosts(self, num_hosts):
+    def update_hosts(self):
+        num_hosts = self.browser.find_element_by_class_name('text-xlg').text
+        self.log_msg(f"Host Count: {num_hosts}")
         self.log_msg(f"Opening {Robot.HOST_URL}...")
         try:
             self.browser.get(Robot.HOST_URL)
@@ -86,10 +88,10 @@ class Robot:
             todoCount = len(buttons_todo)
             doneCount = len(buttons_done)
             total = todoCount + doneCount
-            if todoCount + doneCount == num_hosts:
+            if todoCount + doneCount == int(num_hosts):
                 invalid = False
                 break
-            self.log_msg("Unable to find the renew buttons...", 2)
+            self.log_msg("Unable to find the buttons...", 2)
             retry -= 1
         if invalid:
             self.log_msg("Invalid page or something wrong. See error.png", 2)
@@ -105,13 +107,13 @@ class Robot:
         self.log_msg(f"Total Confirmed hosts: {todoCount}/{total}", 2)
         return True
 
-    def run(self, username, password, num_hosts):
+    def run(self, username, password):
         rc = 0
         self.username = username
         self.log_msg(f"Debug level: {self.debug}")
         try:
             self.login(username, password)
-            if not self.update_hosts(num_hosts):
+            if not self.update_hosts():
                 rc = 3
         except Exception as e:
             self.log_msg("Exception: {}".format(str(e)), 2)
@@ -125,20 +127,19 @@ def main(argv=None):
 
     if argv is None:
         argv = sys.argv
-    if len(argv) < 4:
-        print(f"Usage: {argv[0]} <username> <password> <num-hosts> [<debug-level>]")
+    if len(argv) < 3:
+        print(f"Usage: {argv[0]} <username> <password> [<debug-level>]")
         return 1
 
     username = argv[1]
     password = argv[2]
-    num_hosts = int(argv[3])
     debug = 1
 
-    if len(argv) > 4:
-        debug = int(argv[4])
+    if len(argv) >= 3:
+        debug = int(argv[3])
 
     robot = Robot(debug)
-    return robot.run(username, password, num_hosts)
+    return robot.run(username, password)
 
 if __name__ == "__main__":
     sys.exit(main())
