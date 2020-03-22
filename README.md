@@ -5,7 +5,7 @@ This script auto click web pages to renew the hosts,
 using Python/Selenium with Chrome headless mode.
 
 - Platform: Debian/Ubuntu Linux, no GUI needed (tested on Debian 9.x/10.x); python 2.x/3.x
-- Ver: 0.6
+- Ver: 0.7
 - Ref: [Technical explanation for the code (Chinese)](http://www.jianshu.com/p/3c8196175147)
 - Updated: 21/03/2020
 - Created: 04/11/2017
