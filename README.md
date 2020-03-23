@@ -10,7 +10,6 @@ using Python/Selenium with Chrome headless mode.
 - Updated: 21/03/2020
 - Created: 04/11/2017
 - Author: loblab
-- Modifications by: Demix
 
 ![noip.com hosts](https://raw.githubusercontent.com/loblab/noip-renew/master/screenshot.png)
 
