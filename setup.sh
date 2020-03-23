@@ -1,8 +1,6 @@
 #!/bin/bash
 set -e
 
-# Under install ask user if they want to update packages or not! - Do some smart checks to see versions?
-
 PYTHON=python3
 USER=$(whoami)
 if [ "$USER" == "root" ]; then
@@ -26,7 +24,7 @@ function config() {
 }
 
 function install() {
-    echo "Install necessary packages..."
+    echo "Installing necessary packages..."
     read -p 'Perform apt-get update? (y/n): ' update
     if [ "${update^^}" = "Y" ]
     then
@@ -39,11 +37,10 @@ function install() {
 
 
     PYV=`python3 -c "import sys;t='{v[0]}{v[1]}'.format(v=list(sys.version_info[:2]));sys.stdout.write(t)";`
-
     if [[ "$PYV" -lt "36" ]] || ! hash python3;
     then
       echo "This script requires Python version 3.6 or higher. Attempting to install..."
-      $SUDO apt-get install python3
+      $SUDO apt-get -y install python3
     fi
 
     # Debian9 package 'python-selenium' does not work with chromedriver,
@@ -54,7 +51,7 @@ function install() {
 }
 
 function deploy() {
-    echo "Deploying the script - Will run on Monday, Wednesday & Friday..."
+    echo "Deploying the script - Runs Mon, Weds & Fri..."
     $SUDO mkdir -p $LOGDIR
     $SUDO chown $USER $LOGDIR
     $SUDO cp noip-renew.py $INSTDIR
@@ -64,23 +61,33 @@ function deploy() {
     noip
     $SUDO sed -i '/noip-renew/d' /etc/crontab
     echo "$CRONJOB" | $SUDO tee -a /etc/crontab
-    echo "Done."
-    echo "Please confirm the No-IP Account details in '$INSTEXE'"
-    echo "Check logs in '$LOGDIR' after running the cron job"
+    echo "Installation Complete."
+    echo "To change noip.com account details, please run setup.sh again."
+    echo "Logs can be found in '$LOGDIR'"
 }
 
 function noip() {
     echo "Enter your No-IP Account details..."
     read -p 'Username: ' uservar
     read -sp 'Password: ' passvar
-    $SUDO sed -i 's/USERNAME=""/USERNAME="$uservar"/1' $INSTEXE
-    $SUDO sed -i 's/PASSWORD=""/PASSWORD="$passvar"/1' $INSTEXE
+
+    passvar=`echo -n $passvar | base64`
+    echo
+
+    $SUDO sed -i 's/USERNAME=".*"/USERNAME="'$uservar'"/1' $INSTEXE
+    $SUDO sed -i 's/PASSWORD=".*"/PASSWORD="'$passvar'"/1' $INSTEXE
 }
 
 function installer() {
     config
     install
     deploy
+}
+
+function uninstall() {
+    $SUDO sed -i '/noip-renew/d' /etc/crontab
+    cd /usr/local/bin
+    $SUDO rm *noip-renew*
 }
 
 PS3='Select an option: '
@@ -100,7 +107,9 @@ do
             break
             ;;
         "Uninstall Script")
-            echo "you chose choice $REPLY which is $opt"
+            uninstall
+            echo "Script successfully uninstalled."
+            break
             ;;
         "Exit setup.sh")
             break

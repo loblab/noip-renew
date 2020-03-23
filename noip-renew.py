@@ -18,6 +18,7 @@ from selenium.common.exceptions import TimeoutException
 import time
 import sys
 import os
+import base64
 
 class Robot:
 
@@ -58,7 +59,7 @@ class Robot:
         ele_usr = self.browser.find_element_by_name("username")
         ele_pwd = self.browser.find_element_by_name("password")
         ele_usr.send_keys(username)
-        ele_pwd.send_keys(password)
+        ele_pwd.send_keys(base64.b64decode(password).decode('utf-8'))
         form = self.browser.find_element_by_id("clogs")
         form.submit() # This takes a while.
         if self.debug > 1:
@@ -71,7 +72,6 @@ class Robot:
 
     def update_hosts(self):
         num_hosts = self.browser.find_element_by_class_name('text-xlg').text
-        self.log_msg(f"Host Count: {num_hosts}")
         self.log_msg(f"Opening {Robot.HOST_URL}...")
         try:
             self.browser.get(Robot.HOST_URL)
@@ -85,6 +85,7 @@ class Robot:
             time.sleep(1)
             buttons_todo = self.browser.find_elements_by_xpath(Robot.xpath_of_button('btn-confirm'))
             buttons_done = self.browser.find_elements_by_xpath(Robot.xpath_of_button('btn-configure'))
+            expiry_dates = self.browser.find_elements_by_class_name("no-link-style");
             todoCount = len(buttons_todo)
             doneCount = len(buttons_done)
             total = todoCount + doneCount
@@ -103,8 +104,12 @@ class Robot:
         for button in buttons_todo:
             button.click()
             time.sleep(1)
+        next_renewal = []
+        for expiry in expiry_dates:
+            next_renewal.append(int(''.join(filter(str.isdigit, expiry.text)))-7)
         self.browser.save_screenshot("result.png")
         self.log_msg(f"Total Confirmed hosts: {todoCount}/{total}", 2)
+        self.log_msg(f"Next host ready to update in {min(next_renewal)} days.")
         return True
 
     def run(self, username, password):
@@ -143,3 +148,4 @@ def main(argv=None):
 
 if __name__ == "__main__":
     sys.exit(main())
+
