@@ -5,7 +5,7 @@ This script auto click web pages to renew the hosts,
 using Python/Selenium with Chrome headless mode.
 
 - Platform: Debian/Ubuntu Linux, no GUI needed (tested on Debian 9.x/10.x); python 2.x/3.x
-- Ver: 0.7
+- Ver: 0.8
 - Ref: [Technical explanation for the code (Chinese)](http://www.jianshu.com/p/3c8196175147)
 - Updated: 21/03/2020
 - Created: 04/11/2017
@@ -36,8 +36,9 @@ You can also check [DNS-O-Matic](https://dnsomatic.com/) to update multiple noip
 
 ## History
 
-- 0.7 (23/03/2020): Code tidyup and improved efficiency (Removed number of hosts and automatically get this)
-- 0.6 (23/03/2020): Improved support for Raspberry Pi (Raspbian Buster) & Changes to setup script.
+- 0.8 (23/03/2020): Added menu to repair/install/remove script along with ability to update noip.com details.
+- 0.7 (21/03/2020): Code tidyup and improved efficiency (Removed number of hosts and automatically get this)
+- 0.6 (15/03/2020): Improved support for Raspberry Pi (Raspbian Buster) & Changes to setup script.
 - 0.5 (05/01/2020): Support raspberry pi, try different "chromedriver" packages in setup script.
 - 0.4 (14/01/2019): Add num_hosts argument, change for button renaming; support user agent.
 - 0.3 (19/05/2018): Support Docker, ignore timeout, support proxy, tested on python3.
