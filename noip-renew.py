@@ -121,7 +121,7 @@ class Robot:
             if not self.update_hosts():
                 rc = 3
         except Exception as e:
-            self.log_msg("Exception: {str(e)}", 2)
+            self.log_msg(f"Exception: {str(e)}", 2)
             self.browser.save_screenshot("exception.png")
             rc = 2
         finally:
