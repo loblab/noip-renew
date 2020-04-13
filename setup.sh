@@ -20,7 +20,7 @@ function config() {
     LOGDIR=/var/log/noip-renew/$USER
     INSTDIR=/usr/local/bin
     INSTEXE=$INSTDIR/noip-renew-$USER
-    CRONJOB="05 0    * * 1,3,5   $USER    $INSTEXE $LOGDIR"
+    CRONJOB="30 0    * * *   $USER    $INSTEXE $LOGDIR"
 }
 
 function install() {
@@ -51,16 +51,27 @@ function install() {
 }
 
 function deploy() {
-    echo "Deploying the script - Runs Mon, Weds & Fri..."
+    echo "Deploying the script..."
+
+    # Remove current installation first.
+    if ls $INSTDIR/*noip-renew* 1> /dev/null 2>&1; then
+        cd $INSTDIR
+        $SUDO rm *noip-renew*
+        cd $PWD
+    fi
+
     $SUDO mkdir -p $LOGDIR
     $SUDO chown $USER $LOGDIR
     $SUDO cp noip-renew.py $INSTDIR
+    $SUDO cp noip-renew-skd.sh $INSTDIR
     $SUDO cp noip-renew.sh $INSTEXE
     $SUDO chown $USER $INSTEXE
+    $SUDO chown $USER $INSTDIR/noip-renew-skd.sh
     $SUDO chmod 700 $INSTEXE
     noip
     $SUDO sed -i '/noip-renew/d' /etc/crontab
     echo "$CRONJOB" | $SUDO tee -a /etc/crontab
+    $SUDO sed -i 's/USER=/USER='$USER'/1' $INSTDIR/noip-renew-skd.sh
     echo "Installation Complete."
     echo "To change noip.com account details, please run setup.sh again."
     echo "Logs can be found in '$LOGDIR'"
@@ -86,8 +97,14 @@ function installer() {
 
 function uninstall() {
     $SUDO sed -i '/noip-renew/d' /etc/crontab
-    cd /usr/local/bin
+    cd $INSTDIR
     $SUDO rm *noip-renew*
+    read -p 'Do you want to remove all log files? (y/n): ' clearLogs
+    if [ "${clearLogs^^}" = "Y" ]
+    then
+      $SUDO rm -rf $LOGDIR
+    fi
+    cd ~/
 }
 
 PS3='Select an option: '
@@ -107,8 +124,13 @@ do
             break
             ;;
         "Uninstall Script")
-            uninstall
-            echo "Script successfully uninstalled."
+            config
+            if ls $INSTDIR/*noip-renew* 1> /dev/null 2>&1; then
+                uninstall
+                echo "Script successfully uninstalled."
+            else
+                echo "Script is not installed."
+            fi
             break
             ;;
         "Exit setup.sh")
