@@ -1,5 +1,5 @@
 FROM debian
-MAINTAINER loblab
+LABEL maintainer="loblab"
 
 ARG USER=loblab
 ARG UID=1000
