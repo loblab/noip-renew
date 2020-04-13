@@ -5,18 +5,19 @@ This script auto click web pages to renew the hosts,
 using Python/Selenium with Chrome headless mode.
 
 - Platform: Debian/Ubuntu/Raspbian Linux, no GUI needed (tested on Debian 9.x/10.x); python 2.x/3.x
-- Ver: 0.8
+- Ver: 0.9
 - Ref: [Technical explanation for the code (Chinese)](http://www.jianshu.com/p/3c8196175147)
-- Updated: 03/23/2020
+- Updated: 04/13/2020
 - Created: 11/04/2017
 - Author: loblab
+- Contributor: IDemixI
 
 ![noip.com hosts](https://raw.githubusercontent.com/loblab/noip-renew/master/screenshot.png)
 
 ## Usage
 
 1. Run setup.sh and set your noip.com account information,
-2. Run noip-renew.sh, check result.png (if succeeded) or error.png (if failed)
+2. Run noip-renew.sh, check results.png (if succeeded) or error.png (if failed)
 
 For docker users, check Dockerfile, docker-compose.yml, crontab-docker-host.
 
@@ -28,13 +29,14 @@ grep -h Confirmed *.log | grep -v ": 0" | sort
 
 ## Remarks
 
-The script is not designed to renew/update the dynamic DNS records.
-Check [noip.com document](https://www.noip.com/integrate) for that purpose.
-And most wireless routers support noip.com.
+The script is not designed to renew/update the dynamic DNS records, though the latest version does have this ability if requested.
+Check [noip.com documentation](https://www.noip.com/integrate) for that purpose.
+Most wireless routers support noip.com. For more information, check [here](https://www.noip.com/support/knowledgebase/what-devices-support-no-ips-dynamic-dns-update-service/).
 You can also check [DNS-O-Matic](https://dnsomatic.com/) to update multiple noip.com DNS records.
 
 ## History
 
+- 0.9 (04/13/2020): Complete refactor of code, more stability & automatic crontab scheduling.
 - 0.8 (03/23/2020): Added menu to repair/install/remove script along with ability to update noip.com details.
 - 0.7 (03/21/2020): Code tidyup and improved efficiency (Removed number of hosts and automatically get this)
 - 0.6 (03/15/2020): Improved support for Raspberry Pi (Raspbian Buster) & Changes to setup script.
