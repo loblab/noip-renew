@@ -55,9 +55,7 @@ function deploy() {
 
     # Remove current installation first.
     if ls $INSTDIR/*noip-renew* 1> /dev/null 2>&1; then
-        cd $INSTDIR
-        $SUDO rm *noip-renew*
-        cd $PWD
+        $SUDO rm $INSTDIR/*noip-renew*
     fi
 
     $SUDO mkdir -p $LOGDIR
@@ -97,14 +95,12 @@ function installer() {
 
 function uninstall() {
     $SUDO sed -i '/noip-renew/d' /etc/crontab
-    cd $INSTDIR
-    $SUDO rm *noip-renew*
+    $SUDO rm $INSTDIR/*noip-renew*
     read -p 'Do you want to remove all log files? (y/n): ' clearLogs
     if [ "${clearLogs^^}" = "Y" ]
     then
       $SUDO rm -rf $LOGDIR
     fi
-    cd ~/
 }
 
 PS3='Select an option: '
