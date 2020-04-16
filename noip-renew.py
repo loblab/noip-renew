@@ -99,7 +99,7 @@ class Robot:
                 self.update_host(host_button, host_name)
                 count += 1
             iteration += 1
-            self.browser.save_screenshot("results.png")
+        self.browser.save_screenshot("results.png")
         self.logger.log(f"Confirmed hosts: {count}", 2)
         nr = min(next_renewal) - 6
         today = date.today() + timedelta(days=nr)
@@ -120,6 +120,8 @@ class Robot:
         self.logger.log(f"Updating {host_name}")
         host_button.click()
         time.sleep(3)
+        if self.browser.find_elements_by_xpath("//h2[@class='big']")[0].text == "Upgrade Now":
+            raise Exception("Manual intervention required. Upgrade dialog triggered.")
         self.browser.save_screenshot(f"{host_name}_success.png")
 
     @staticmethod
