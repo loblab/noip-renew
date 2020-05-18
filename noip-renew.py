@@ -120,8 +120,11 @@ class Robot:
         self.logger.log(f"Updating {host_name}")
         host_button.click()
         time.sleep(3)
-        if self.browser.find_elements_by_xpath("//h2[@class='big']")[0].text == "Upgrade Now":
-            raise Exception("Manual intervention required. Upgrade dialog triggered.")
+        try:
+            if self.browser.find_elements_by_xpath("//h2[@class='big']")[0].text == "Upgrade Now":
+                raise Exception("Manual intervention required. Upgrade dialog triggered.")
+        except:
+            pass
         self.browser.save_screenshot(f"{host_name}_success.png")
 
     @staticmethod
@@ -139,7 +142,7 @@ class Robot:
 
     @staticmethod
     def get_host_button(host, iteration):
-        return host.find_element_by_xpath("//following-sibling::td[4]/button[contains(@class, 'btn')]")
+        return host.find_element_by_xpath(".//following-sibling::td[4]/button[contains(@class, 'btn')]")
 
     def get_hosts(self):
         host_tds = self.browser.find_elements_by_xpath("//td[@data-title='Host']")
