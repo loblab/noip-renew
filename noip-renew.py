@@ -120,16 +120,25 @@ class Robot:
         self.logger.log(f"Updating {host_name}")
         host_button.click()
         time.sleep(3)
+        intervention = False
         try:
             if self.browser.find_elements_by_xpath("//h2[@class='big']")[0].text == "Upgrade Now":
-                raise Exception("Manual intervention required. Upgrade dialog triggered.")
+                intervention = True
         except:
             pass
+
+        if intervention:
+            raise Exception("Manual intervention required. Upgrade text detected.")
+
         self.browser.save_screenshot(f"{host_name}_success.png")
 
     @staticmethod
     def get_host_expiration_days(host, iteration):
-        host_remaining_days = host.find_element_by_xpath(".//a[@class='no-link-style']").text
+        try:
+            host_remaining_days = host.find_element_by_xpath(".//a[@class='no-link-style']").text
+        except:
+            host_remaining_days = "Expires in 0 days"
+            pass
         regex_match = re.search("\\d+", host_remaining_days)
         if regex_match is None:
             raise Exception("Expiration days label does not match the expected pattern in iteration: {iteration}")
