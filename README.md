@@ -5,7 +5,7 @@ This script auto clicks web pages to renew the hosts,
 using Python/Selenium with Chrome headless mode.
 
 - Platform: Debian/Ubuntu/Raspbian Linux, no GUI needed (tested on Debian 9.x/10.x); python 3.6+
-- Ver: 1.0
+- Ver: 1.1
 - Ref: [Technical explanation for the code (Chinese)](http://www.jianshu.com/p/3c8196175147)
 - Updated: 05/18/2020
 - Created: 11/04/2017
@@ -16,8 +16,9 @@ using Python/Selenium with Chrome headless mode.
 
 ## Usage
 
-1. Run setup.sh and set your noip.com account information,
-2. Run noip-renew.sh, check results.png (if succeeded) or error.png (if failed)
+1. Clone this repository to the device you will be running it from. (`git clone https://github.com/loblab/noip-renew.git`)
+2. Run setup.sh and set your noip.com account information,
+3. Run noip-renew.sh, check results.png (if succeeded) or error.png (if failed)
 
 For docker users, check Dockerfile, docker-compose.yml, crontab-docker-host.
 
@@ -35,6 +36,7 @@ Most wireless routers support noip.com. For more information, check [here](https
 You can also check [DNS-O-Matic](https://dnsomatic.com/) to update multiple noip.com DNS records.
 
 ## History
+- 1.1 (06/05/2020): Fixed error when attempting to update an expired host.
 - 1.0 (05/18/2020): Minor fixes to an xpath & a try catch pass to avoid an exception. Also fixed versioning.
 - 1.0 (04/16/2020): Catches "Would you like to upgrade?" page & stops script accordingly. Manual intervention still required.
 - 0.9 (04/13/2020): Complete refactor of code, more stability & automatic crontab scheduling.
