@@ -8,12 +8,10 @@ INSTEXE=$INSTDIR/noip-renew-$USER
 CRONJOB="30 0    * * *   $USER    $INSTEXE $LOGDIR"
 NEWCJOB="30 0    $1 $2 *   $USER    $INSTEXE $LOGDIR"
 
-$SUDO sed -i '/noip-renew/d' /etc/crontab
-
 if [ $3 = "True" ]; then
-    echo "$NEWCJOB" | $SUDO tee -a /etc/crontab
+    ($SUDO crontab -u $USER -l; echo "$NEWCRONJOB") | $SUDO crontab -u $USER -
 else
-    echo "$CRONJOB" | $SUDO tee -a /etc/crontab
+    ($SUDO crontab -u $USER -l; echo "$CRONJOB") | $SUDO crontab -u $USER -
 fi
 
 exit 0
