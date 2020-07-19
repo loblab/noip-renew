@@ -25,12 +25,29 @@ function config() {
 
 function install() {
     OS=$(hostnamectl | grep -i "operating system")
-    if [[ $OS =~ "Arch Linux" ]]; then
-        $SUDO pacman -Qi python > /dev/null ||  (echo "Updating Python..." && $SUDO pacman -S python)
-        $SUDO pacman -Qi python-pip > /dev/null ||  $SUDO pacman -S python-pip
-        $SUDO pacman -Qi chromium > /dev/null || $SUDO pacman -S chromium
-    else
-        echo "Installing necessary packages..."
+    echo "$OS"
+    case $OS in
+        *Arch?Linux*)
+            install_arch
+            ;;
+        *)
+            install_debian
+            ;;
+    esac
+    # Debian9 package 'python-selenium' does not work with chromedriver,
+    # Install from pip, which is newer
+    $SUDO $PYTHON -m pip install selenium
+}
+
+function install_arch(){
+    $SUDO pacman -Qi cronie > /dev/null ||  $SUDO pacman -S cronie
+    $SUDO pacman -Qi python > /dev/null ||  $SUDO pacman -S python
+    $SUDO pacman -Qi python-pip > /dev/null ||  $SUDO pacman -S python-pip
+    $SUDO pacman -Qi chromium > /dev/null || $SUDO pacman -S chromium
+}
+
+function install_debian(){
+    echo "Installing necessary packages..."
         read -p 'Perform apt-get update? (y/n): ' update
         if [ "${update^^}" = "Y" ]
         then
@@ -41,6 +58,8 @@ function install() {
         $SUDO apt -y install chromium-driver || \
         $SUDO apt -y install chromedriver
 
+        $SUDO apt -y install cron 
+
         PYV=`python3 -c "import sys;t='{v[0]}{v[1]}'.format(v=list(sys.version_info[:2]));sys.stdout.write(t)";`
         if [[ "$PYV" -lt "36" ]] || ! hash python3;
         then
@@ -48,13 +67,8 @@ function install() {
             $SUDO apt-get -y install python3
         fi
 
-        # Debian9 package 'python-selenium' does not work with chromedriver,
-        # Install from pip, which is newer
         $SUDO apt -y install chromium-browser # Update Chromium Browser or script won't work.
         $SUDO apt -y install $PYTHON-pip
-
-    fi
-    $SUDO $PYTHON -m pip install selenium
 }
 
 function deploy() {
@@ -74,6 +88,7 @@ function deploy() {
     $SUDO chown $USER $INSTDIR/noip-renew-skd.sh
     $SUDO chmod 700 $INSTEXE
     noip
+    $SUDO crontab -u $USER -l | grep -v '/noip-renew*'  | $SUDO crontab -u $USER -
     ($SUDO crontab -u $USER -l; echo "$CRONJOB") | $SUDO crontab -u $USER -
     $SUDO sed -i 's/USER=/USER='$USER'/1' $INSTDIR/noip-renew-skd.sh
     echo "Installation Complete."
