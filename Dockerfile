@@ -1,9 +1,6 @@
 FROM debian
 MAINTAINER loblab
 
-ARG USER=loblab
-ARG UID=1000
-ARG HOME=/noip-renew
 #ARG TZ=Asia/Shanghai
 #ARG APT_MIRROR=mirrors.163.com
 ARG DEBIAN_FRONTED=noninteractive
@@ -19,8 +16,8 @@ RUN apt-get -y install ${PYTHON}-pip
 RUN $PYTHON -m pip install selenium
 RUN apt-get -y install curl wget
 
-RUN useradd -d $HOME -u $UID $USER
-USER $USER
-WORKDIR $HOME
+RUN useradd -u 1000 loblab
+USER loblab
+WORKDIR /home/loblab
 CMD ["bash"]
 
