@@ -5,9 +5,6 @@ services:
     selenium:
         build:
             context: .
-            args:
-                - USER
-                - UID
         image: loblab/selenium:debian
         hostname: selenium
         container_name: loblab-selenium
