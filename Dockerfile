@@ -16,7 +16,9 @@ RUN apt-get -y install ${PYTHON}-pip
 RUN $PYTHON -m pip install selenium
 RUN apt-get -y install curl wget
 
-RUN useradd -u 1000 loblab
+RUN mkdir -p /home/loblab && \
+    useradd -d /home/loblab -u 1001 loblab && \
+    chown loblab:loblab /home/loblab
 USER loblab
 WORKDIR /home/loblab
 CMD ["bash"]
