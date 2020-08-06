@@ -21,5 +21,5 @@ RUN mkdir -p /home/loblab && \
     chown loblab:loblab /home/loblab
 USER loblab
 WORKDIR /home/loblab
-CMD ["bash"]
-
+COPY /noip-renew.py /home/loblab/
+ENTRYPOINT ["python3", "/home/loblab/noip-renew.py"]
