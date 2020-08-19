@@ -1,5 +1,4 @@
 #!/bin/sh
-
 USER=
 SUDO=sudo
 LOGDIR=/var/log/noip-renew/$USER
