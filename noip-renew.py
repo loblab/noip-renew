@@ -169,7 +169,7 @@ class Robot:
         except Exception as e:
             self.logger.log(str(e))
             self.browser.save_screenshot("exception.png")
-            subprocess.call(['/usr/local/bin/noip-renew-skd.sh', "0", "0", "False"])
+            subprocess.call(['/usr/local/bin/noip-renew-skd.sh', "*", "*", "False"])
             rc = 2
         finally:
             self.browser.quit()
