@@ -20,7 +20,7 @@ function config() {
     LOGDIR=/var/log/noip-renew/$USER
     INSTDIR=/usr/local/bin
     INSTEXE=$INSTDIR/noip-renew-$USER.sh
-    CRONJOB="30 0    * * *   $USER    $INSTEXE $LOGDIR"
+    CRONJOB="0 1    * * *   $USER    $INSTEXE $LOGDIR"
 }
 
 function install() {
@@ -68,6 +68,7 @@ function deploy() {
     $SUDO chmod 700 $INSTEXE
     noip
     $SUDO sed -i '/noip-renew/d' /etc/crontab
+    echo "#Auto renew NO-IP DDNS script" >> /etc/crontab
     echo "$CRONJOB" | $SUDO tee -a /etc/crontab
     $SUDO sed -i 's/USER=/USER='$USER'/1' $INSTDIR/noip-renew-skd.sh
     echo "Installation Complete."
