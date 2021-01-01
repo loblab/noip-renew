@@ -19,8 +19,8 @@ fi
 function config() {
     LOGDIR=/var/log/noip-renew/$USER
     INSTDIR=/usr/local/bin
-    INSTEXE=$INSTDIR/noip-renew-$USER
-    CRONJOB="30 0    * * *   $USER    $INSTEXE $LOGDIR"
+    INSTEXE=$INSTDIR/noip-renew-$USER.sh
+    CRONJOB="0 1    * * *   $USER    $INSTEXE $LOGDIR"
 }
 
 function install() {
