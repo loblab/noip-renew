@@ -4,7 +4,7 @@
 This script auto clicks web pages to renew the hosts,
 using Python/Selenium with Chrome headless mode.
 
-- Platform: Debian/Ubuntu/Raspbian Linux, no GUI needed (tested on Debian 9.x/10.x); python 3.6+
+- Platform: Debian/Ubuntu/Raspbian/Arch Linux, no GUI needed (tested on Debian 9.x/10.x/Arch Linux); python 3.6+
 - Ver: 1.1
 - Ref: [Technical explanation for the code (Chinese)](http://www.jianshu.com/p/3c8196175147)
 - Updated: 05/18/2020
@@ -18,14 +18,23 @@ using Python/Selenium with Chrome headless mode.
 
 1. Clone this repository to the device you will be running it from. (`git clone https://github.com/loblab/noip-renew.git`)
 2. Run setup.sh and set your noip.com account information,
-3. Run noip-renew.sh, check results.png (if succeeded) or error.png (if failed)
-
-For docker users, check Dockerfile, docker-compose.yml, crontab-docker-host.
+3. Run noip-renew-USERNAME command.
 
 Check confirmed records from multiple log files:
 
 ``` bash
 grep -h Confirmed *.log | grep -v ": 0" | sort
+```
+## Usage with Docker
+
+For docker users, run the following:
+```sh
+my_username='add username here'
+my_password='add password here'
+my_host_num='add number of hosts here'
+debug_lvl=2
+docker build loblab/selenium:debian .
+echo -e "$(crontab -l)"$'\n'"12  3  *  *  1,3,5  docker run --network host loblab/selenium:debian ${my_username} ${my_password} ${my_host_num} ${debug_lvl}" | crontab -
 ```
 
 ## Remarks
