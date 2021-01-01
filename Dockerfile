@@ -1,9 +1,6 @@
 FROM debian
 LABEL maintainer="loblab"
 
-ARG USER=loblab
-ARG UID=1000
-ARG HOME=/noip-renew
 #ARG TZ=Asia/Shanghai
 #ARG APT_MIRROR=mirrors.163.com
 ARG DEBIAN_FRONTED=noninteractive
@@ -19,8 +16,10 @@ RUN apt-get -y install ${PYTHON}-pip
 RUN $PYTHON -m pip install selenium
 RUN apt-get -y install curl wget
 
-RUN useradd -d $HOME -u $UID $USER
-USER $USER
-WORKDIR $HOME
-CMD ["bash"]
-
+RUN mkdir -p /home/loblab && \
+    useradd -d /home/loblab -u 1001 loblab && \
+    chown loblab:loblab /home/loblab
+USER loblab
+WORKDIR /home/loblab
+COPY /noip-renew.py /home/loblab/
+ENTRYPOINT ["python3", "/home/loblab/noip-renew.py"]
