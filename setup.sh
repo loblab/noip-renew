@@ -24,30 +24,51 @@ function config() {
 }
 
 function install() {
-    echo "Installing necessary packages..."
-    read -p 'Perform apt-get update? (y/n): ' update
-    if [ "${update^^}" = "Y" ]
-    then
-      $SUDO apt-get update
-    fi
-
-    $SUDO apt -y install chromium-chromedriver || \
-      $SUDO apt -y install chromium-driver || \
-      $SUDO apt -y install chromedriver
-
-
-    PYV=`python3 -c "import sys;t='{v[0]}{v[1]}'.format(v=list(sys.version_info[:2]));sys.stdout.write(t)";`
-    if [[ "$PYV" -lt "36" ]] || ! hash python3;
-    then
-      echo "This script requires Python version 3.6 or higher. Attempting to install..."
-      $SUDO apt-get -y install python3
-    fi
-
+    OS=$(hostnamectl | grep -i "operating system")
+    echo "$OS"
+    case $OS in
+        *Arch?Linux*)
+            install_arch
+            ;;
+        *)
+            install_debian
+            ;;
+    esac
     # Debian9 package 'python-selenium' does not work with chromedriver,
     # Install from pip, which is newer
-    $SUDO apt -y install chromium-browser # Update Chromium Browser or script won't work.
-    $SUDO apt -y install $PYTHON-pip
     $SUDO $PYTHON -m pip install selenium
+}
+
+function install_arch(){
+    $SUDO pacman -Qi cronie > /dev/null ||  $SUDO pacman -S cronie
+    $SUDO pacman -Qi python > /dev/null ||  $SUDO pacman -S python
+    $SUDO pacman -Qi python-pip > /dev/null ||  $SUDO pacman -S python-pip
+    $SUDO pacman -Qi chromium > /dev/null || $SUDO pacman -S chromium
+}
+
+function install_debian(){
+    echo "Installing necessary packages..."
+        read -p 'Perform apt-get update? (y/n): ' update
+        if [ "${update^^}" = "Y" ]
+        then
+            $SUDO apt-get update
+        fi
+
+        $SUDO apt -y install chromium-chromedriver || \
+        $SUDO apt -y install chromium-driver || \
+        $SUDO apt -y install chromedriver
+
+        $SUDO apt -y install cron 
+
+        PYV=`python3 -c "import sys;t='{v[0]}{v[1]}'.format(v=list(sys.version_info[:2]));sys.stdout.write(t)";`
+        if [[ "$PYV" -lt "36" ]] || ! hash python3;
+        then
+            echo "This script requires Python version 3.6 or higher. Attempting to install..."
+            $SUDO apt-get -y install python3
+        fi
+
+        $SUDO apt -y install chromium-browser # Update Chromium Browser or script won't work.
+        $SUDO apt -y install $PYTHON-pip
 }
 
 function deploy() {
@@ -67,8 +88,8 @@ function deploy() {
     $SUDO chown $USER $INSTDIR/noip-renew-skd.sh
     $SUDO chmod 700 $INSTEXE
     noip
-    $SUDO sed -i '/noip-renew/d' /etc/crontab
-    echo "$CRONJOB" | $SUDO tee -a /etc/crontab
+    $SUDO crontab -u $USER -l | grep -v '/noip-renew*'  | $SUDO crontab -u $USER -
+    ($SUDO crontab -u $USER -l; echo "$CRONJOB") | $SUDO crontab -u $USER -
     $SUDO sed -i 's/USER=/USER='$USER'/1' $INSTDIR/noip-renew-skd.sh
     echo "Installation Complete."
     echo "To change noip.com account details, please run setup.sh again."
