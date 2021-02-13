@@ -33,7 +33,7 @@ my_username='add username here'
 my_password='add password here'
 my_host_num='add number of hosts here'
 debug_lvl=2
-docker build loblab/selenium:debian .
+docker build -t loblab/selenium:debian .
 echo -e "$(crontab -l)"$'\n'"12  3  *  *  1,3,5  docker run --network host loblab/selenium:debian ${my_username} ${my_password} ${my_host_num} ${debug_lvl}" | crontab -
 ```
 
