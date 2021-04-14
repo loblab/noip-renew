@@ -74,7 +74,7 @@ class Robot:
         ele_pwd = self.browser.find_element_by_name("password")
         ele_usr.send_keys(self.username)
         ele_pwd.send_keys(base64.b64decode(self.password).decode('utf-8'))
-        self.browser.find_element_by_name("Login").click()
+        ele_usr.submit()
         if self.debug > 1:
             time.sleep(1)
             self.browser.save_screenshot("debug2.png")
