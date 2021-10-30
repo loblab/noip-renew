@@ -135,7 +135,7 @@ class Robot:
     @staticmethod
     def get_host_expiration_days(host, iteration):
         try:
-            host_remaining_days = host.find_element_by_xpath(".//a[@class='no-link-style']").text
+            host_remaining_days = host.find_element_by_xpath(".//a[@class='no-link-style']").get_attribute("title")
         except:
             host_remaining_days = "Expires in 0 days"
             pass
