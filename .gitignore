@@ -103,5 +103,8 @@ ENV/
 .bash_history
 .pki
 .wget-hsts
-*.png
+*success.png
+exception.png
+debug*.png
+results.png
 vps_mon.py
