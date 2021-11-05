@@ -99,3 +99,9 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+.bash_history
+.pki
+.wget-hsts
+*.png
+vps_mon.py
