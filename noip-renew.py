@@ -138,13 +138,13 @@ class Robot:
     @staticmethod
     def get_host_expiration_days(host, iteration):
         try:
-            host_remaining_days = host.find_element_by_xpath(".//a[@class='no-link-style']").get_attribute("title")
+            host_remaining_days = host.find_element_by_xpath(".//a[contains(@class,'no-link-style')]").get_attribute("data-original-title")
         except:
             host_remaining_days = "Expires in 0 days"
             pass
         regex_match = re.search("\\d+", host_remaining_days)
         if regex_match is None:
-            host_remaining_days = host.find_element_by_xpath(".//a[@class='no-link-style']").text
+            host_remaining_days = host.find_element_by_xpath(".//a[contains(@class,'no-link-style')]").text
         regex_match = re.search("\\d+", host_remaining_days)
         if regex_match is None:
             raise Exception("Expiration days label does not match the expected pattern in iteration: {iteration}")
