@@ -70,13 +70,10 @@ class Robot:
             self.browser.save_screenshot("debug1.png")
 
         self.logger.log("Logging in...")
-        #ele_usr = self.browser.find_element_by_name("username")
-        #ele_pwd = self.browser.find_element_by_name("password")
         ele_usr = self.browser.find_element_by_xpath("//form[@id='clogs']/input[@name='username']")
         ele_pwd = self.browser.find_element_by_xpath("//form[@id='clogs']/input[@name='password']")
         ele_usr.send_keys(self.username)
         ele_pwd.send_keys(self.password)
-        #self.browser.find_element_by_name("Login").click()
         self.browser.find_element_by_xpath("//form[@id='clogs']/button[@type='submit']").click()
         if self.debug > 1:
             time.sleep(1)
@@ -104,11 +101,11 @@ class Robot:
             iteration += 1
         self.browser.save_screenshot("results.png")
         self.logger.log(f"Confirmed hosts: {count}", 2)
-        #nr = min(next_renewal) - 6
-        #today = date.today() + timedelta(days=nr)
-        #day = str(today.day)
-        #month = str(today.month)
-        #subprocess.call(['/usr/local/bin/noip-renew-skd.sh', day, month, "True"])
+        #NOCRON nr = min(next_renewal) - 6
+        #NOCRON today = date.today() + timedelta(days=nr)
+        #NOCRON day = str(today.day)
+        #NOCRON month = str(today.month)
+        #NOCRON subprocess.call(['/usr/local/bin/noip-renew-skd.sh', day, month, "True"])
         return True
 
     def open_hosts_page(self):
@@ -174,7 +171,7 @@ class Robot:
         except Exception as e:
             self.logger.log(str(e))
             self.browser.save_screenshot("exception.png")
-            #subprocess.call(['/usr/local/bin/noip-renew-skd.sh', "*", "*", "False"])
+            #NOCRON subprocess.call(['/usr/local/bin/noip-renew-skd.sh', "*", "*", "False"])
             rc = 2
         finally:
             self.browser.quit()
