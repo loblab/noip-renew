@@ -15,6 +15,7 @@
 
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.common.by import By
 from datetime import date
 from datetime import timedelta
 import time
@@ -70,11 +71,11 @@ class Robot:
             self.browser.save_screenshot("debug1.png")
 
         self.logger.log("Logging in...")
-        ele_usr = self.browser.find_element_by_xpath("//form[@id='clogs']/input[@name='username']")
-        ele_pwd = self.browser.find_element_by_xpath("//form[@id='clogs']/input[@name='password']")
+        ele_usr = self.browser.find_element(By.XPATH, "//form[@id='clogs']/input[@name='username']")
+        ele_pwd = self.browser.find_element(By.XPATH, "//form[@id='clogs']/input[@name='password']")
         ele_usr.send_keys(self.username)
         ele_pwd.send_keys(self.password)
-        self.browser.find_element_by_xpath("//form[@id='clogs']/button[@type='submit']").click()
+        self.browser.find_element(By.XPATH, "//form[@id='clogs']/button[@type='submit']").click()
         if self.debug > 1:
             time.sleep(1)
             self.browser.save_screenshot("debug2.png")
@@ -122,7 +123,7 @@ class Robot:
         time.sleep(3)
         intervention = False
         try:
-            if self.browser.find_elements_by_xpath("//h2[@class='big']")[0].text == "Upgrade Now":
+            if self.browser.find_elements(By.XPATH, "//h2[@class='big']")[0].text == "Upgrade Now":
                 intervention = True
         except:
             pass
@@ -135,7 +136,7 @@ class Robot:
     @staticmethod
     def get_host_expiration_days(host, iteration):
         try:
-            host_remaining_days = host.find_element_by_xpath(".//a[contains(@class,'no-link-style')]")
+            host_remaining_days = host.find_element(By.XPATH, ".//a[contains(@class,'no-link-style')]")
         except:
             return 0
         if host_remaining_days.get_attribute("data-original-title") is not None:
@@ -149,14 +150,14 @@ class Robot:
 
     @staticmethod
     def get_host_link(host, iteration):
-        return host.find_element_by_xpath(".//a[@class='link-info cursor-pointer']")
+        return host.find_element(By.XPATH, ".//a[@class='link-info cursor-pointer']")
 
     @staticmethod
     def get_host_button(host, iteration):
-        return host.find_element_by_xpath(".//following-sibling::td[4]/button[contains(@class, 'btn')]")
+        return host.find_element(By.XPATH, ".//following-sibling::td[4]/button[contains(@class, 'btn')]")
 
     def get_hosts(self):
-        host_tds = self.browser.find_elements_by_xpath("//td[@data-title=\"Host\"]")
+        host_tds = self.browser.find_elements(By.XPATH, "//td[@data-title=\"Host\"]")
         if len(host_tds) == 0:
             raise Exception("No hosts or host table rows not found")
         return host_tds
