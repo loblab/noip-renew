@@ -4,13 +4,16 @@
 This script auto clicks web pages to renew the hosts,
 using Python/Selenium with Chrome headless mode.
 
+NOTE: this is an up-to-date fork of loblab/noip-renew repository as it seems it's not anymore actively developed, I'll try to keep this fork up to date and working as much as possible. Feel free to contribute!
+
 - Platform: Debian/Ubuntu/Raspbian/Arch Linux, no GUI needed (tested on Debian 9.x/10.x/Arch Linux); python 3.6+
-- Ver: 1.2
+- Ver: 1.5
 - Ref: [Technical explanation for the code (Chinese)](http://www.jianshu.com/p/3c8196175147)
-- Updated: 1/2/2021
+- Updated: 11/23/2021
 - Created: 11/04/2017
-- Author: loblab
-- Contributor: [IDemixI](https://www.github.com/IDemixI)
+- Original Author: loblab
+- Fork Mantainer: neothematrix
+- Contributors: [IDemixI](https://github.com/IDemixI), [Angel0ffDeath](https://github.com/Angel0ffDeath), [benyjr](https://github.com/benyjr)
 
 ![noip.com hosts](https://raw.githubusercontent.com/loblab/noip-renew/master/screenshot.png)
 
@@ -47,6 +50,7 @@ You can also check [DNS-O-Matic](https://dnsomatic.com/) to update multiple noip
 If you need notification functionality, please try [IDemixI's branch](https://github.com/IDemixI/noip-renew/tree/notifications).
 
 ## History
+- 1.5 (11/23/2021): Created this fork and merged all pull requests making the script working again.
 - 1.2 (01/02/2021): Merged all pull requests in latest months: make it work for updated noip.com site.
 - 1.1 (06/05/2020): Fixed error when attempting to update an expired host.
 - 1.0 (05/18/2020): Minor fixes to an xpath & a try catch pass to avoid an exception. Also fixed versioning.
