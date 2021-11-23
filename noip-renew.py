@@ -16,6 +16,7 @@
 from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from datetime import date
 from datetime import timedelta
 import time
@@ -78,7 +79,8 @@ class Robot:
         ele_pwd = self.browser.find_element(By.XPATH, "//form[@id='clogs']/input[@name='password']")
         ele_usr.send_keys(self.username)
         ele_pwd.send_keys(base64.b64decode(self.password).decode('utf-8'))
-        self.browser.find_element(By.XPATH, "//form[@id='clogs']/button[@type='submit']").click()
+        ele_pwd.send_keys(Keys.ENTER)
+#        self.browser.find_element(By.XPATH, "//form[@id='clogs']/button[@type='submit']").click()
         if self.debug > 1:
             time.sleep(1)
             self.browser.save_screenshot("debug2.png")
