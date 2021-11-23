@@ -19,7 +19,7 @@ NOTE: this is an up-to-date fork of loblab/noip-renew repository as it seems it'
 
 ## Usage
 
-1. Clone this repository to the device you will be running it from. (`git clone https://github.com/loblab/noip-renew.git`)
+1. Clone this repository to the device you will be running it from. (`git clone https://github.com/neothematrix/noip-renew.git`)
 2. Run setup.sh and set your noip.com account information,
 3. Run noip-renew-USERNAME command.
 
@@ -33,21 +33,20 @@ grep -h Confirmed *.log | grep -v ": 0" | sort
 For docker users, run the following:
 ```sh
 my_username='add username here'
-my_password='add password here'
-my_host_num='add number of hosts here'
+my_password='add base64 encoded password here'
 debug_lvl=2
-docker build -t loblab/selenium:debian .
-echo -e "$(crontab -l)"$'\n'"12  3  *  *  1,3,5  docker run --network host loblab/selenium:debian ${my_username} ${my_password} ${my_host_num} ${debug_lvl}" | crontab -
+docker build -t neothematrix/noip-renew .
+echo -e "$(crontab -l)"$'\n'"12  3  *  *  1,3,5  docker run --network host neothematrix/noip-renew ${my_username} ${my_password} ${debug_lvl}" | crontab -
 ```
 
 ## Remarks
 
-The script is not designed to renew/update the dynamic DNS records, though the latest version does have this ability if requested.
+The script is not designed to renew/update the dynamic DNS records, but only to renew the hostnames expiring every 30 days due to the free tier.
 Check [noip.com documentation](https://www.noip.com/integrate) for that purpose.
 Most wireless routers support noip.com. For more information, check [here](https://www.noip.com/support/knowledgebase/what-devices-support-no-ips-dynamic-dns-update-service/).
 You can also check [DNS-O-Matic](https://dnsomatic.com/) to update multiple noip.com DNS records.
 
-If you need notification functionality, please try [IDemixI's branch](https://github.com/IDemixI/noip-renew/tree/notifications).
+If you need notification functionality, please try [IDemixI's branch](https://github.com/IDemixI/noip-renew/tree/notifications). - OUTDATED
 
 ## History
 - 1.5 (11/23/2021): Created this fork and merged all pull requests making the script working again.
