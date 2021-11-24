@@ -80,7 +80,6 @@ class Robot:
         ele_usr.send_keys(self.username)
         ele_pwd.send_keys(base64.b64decode(self.password).decode('utf-8'))
         ele_pwd.send_keys(Keys.ENTER)
-#        self.browser.find_element(By.XPATH, "//form[@id='clogs']/button[@type='submit']").click()
         if self.debug > 1:
             time.sleep(1)
             self.browser.save_screenshot("debug2.png")
