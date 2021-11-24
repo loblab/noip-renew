@@ -26,9 +26,6 @@ import re
 import base64
 import subprocess
 
-# If you want to disable the crontab setup feature, change the following "crontab_enabled" variable to False
-crontab_enabled = True
-
 class Logger:
     def __init__(self, level):
         self.level = 0 if level is None else level
@@ -110,7 +107,10 @@ class Robot:
         today = date.today() + timedelta(days=nr)
         day = str(today.day)
         month = str(today.month)
-        if crontab_enabled: subprocess.call(['/usr/local/bin/noip-renew-skd.sh', day, month, "True"])
+        try:
+            subprocess.call(['/usr/local/bin/noip-renew-skd.sh', day, month, "True"])
+        except (FileNotFoundError,PermissionError):
+            self.logger.log(f"noip-renew-skd.sh missing or not executable, skipping crontab configuration")
         return True
 
     def open_hosts_page(self):
@@ -176,7 +176,10 @@ class Robot:
         except Exception as e:
             self.logger.log(str(e))
             self.browser.save_screenshot("exception.png")
-            if crontab_enabled: subprocess.call(['/usr/local/bin/noip-renew-skd.sh', "*", "*", "False"])
+            try:
+                subprocess.call(['/usr/local/bin/noip-renew-skd.sh', "*", "*", "False"])
+            except (FileNotFoundError,PermissionError):
+                self.logger.log(f"noip-renew-skd.sh missing or not executable, skipping crontab configuration")
             rc = 2
         finally:
             self.browser.quit()
