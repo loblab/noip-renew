@@ -1,3 +1,5 @@
+[![Docker Image CI](https://github.com/neothematrix/noip-renew/actions/workflows/docker-image.yml/badge.svg)](https://github.com/neothematrix/noip-renew/actions/workflows/docker-image.yml)
+
 # Script to auto renew/confirm noip.com free hosts
 
 [noip.com](https://www.noip.com/) free hosts expire every month.
@@ -35,8 +37,7 @@ For docker users, run the following:
 my_username='add username here'
 my_password='add base64 encoded password here'
 debug_lvl=2
-docker build -t neothematrix/noip-renew .
-echo -e "$(crontab -l)"$'\n'"12  3  *  *  1,3,5  docker run --network host neothematrix/noip-renew ${my_username} ${my_password} ${debug_lvl}" | crontab -
+echo -e "$(crontab -l)"$'\n'"12  3  *  *  1,3,5  docker run --rm --network host moebiuss/noip-renew ${my_username} ${my_password} ${debug_lvl}" | crontab -
 ```
 
 ## Remarks
