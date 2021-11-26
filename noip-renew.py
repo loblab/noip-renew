@@ -91,7 +91,11 @@ class Robot:
         ele_pwd.send_keys(Keys.ENTER)
         
         # After Loggin browser loads my.noip.com page - give him some time to load
-        self.browser.implicitly_wait(1)
+        # 'noip-cart' element is near the end of html, so html have been loaded
+        try:
+            elem = WebDriverWait(self.browser, 10).until( EC.presence_of_element_located((By.ID, "noip-cart")))
+        except:
+            raise Exception("my.noip.com page could not load")        
 
         if self.debug > 1:
 #            time.sleep(1)
@@ -101,7 +105,8 @@ class Robot:
         count = 0
 
         self.open_hosts_page()
-        time.sleep(1)
+        self.browser.implicitly_wait(1)
+#        time.sleep(1)
         iteration = 1
         next_renewal = []
 
@@ -140,7 +145,8 @@ class Robot:
     def update_host(self, host_button, host_name):
         self.logger.log(f"Updating {host_name}")
         host_button.click()
-        time.sleep(3)
+        self.browser.implicitly_wait(3)
+#        time.sleep(3)
         intervention = False
         try:
             if self.browser.find_elements(By.XPATH, "//h2[@class='big']")[0].text == "Upgrade Now":
