@@ -61,6 +61,7 @@ class Robot:
         options.add_argument("no-sandbox")  # need when run in docker
         options.add_argument("window-size=1200x800")
         options.add_argument(f"user-agent={Robot.USER_AGENT}")
+        options.add_argument("disable-gpu")
         if 'https_proxy' in os.environ:
             options.add_argument("proxy-server=" + os.environ['https_proxy'])
         browser = webdriver.Chrome(options=options)
