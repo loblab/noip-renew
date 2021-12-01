@@ -17,6 +17,8 @@ from selenium import webdriver
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from datetime import date
 from datetime import timedelta
 import time
@@ -68,24 +70,43 @@ class Robot:
     def login(self):
         self.logger.log(f"Opening {Robot.LOGIN_URL}...")
         self.browser.get(Robot.LOGIN_URL)
+        
+        try:
+            elem = WebDriverWait(self.browser, 10).until( EC.presence_of_element_located((By.ID, "signup-wrap")))
+        except:
+            raise Exception("Login page could not be loaded")
+            
         if self.debug > 1:
             self.browser.save_screenshot("debug1.png")
 
         self.logger.log("Logging in...")
-        ele_usr = self.browser.find_element(By.XPATH, "//form[@id='clogs']/input[@name='username']")
-        ele_pwd = self.browser.find_element(By.XPATH, "//form[@id='clogs']/input[@name='password']")
+#        ele_usr = self.browser.find_element(By.XPATH, "//form[@id='clogs']/input[@name='username']")
+#        ele_pwd = self.browser.find_element(By.XPATH, "//form[@id='clogs']/input[@name='password']")
+        
+        ele_usr = elem.find_element(By.NAME, "username")
+        ele_pwd = elem.find_element(By.NAME, "password")
+        
         ele_usr.send_keys(self.username)
         ele_pwd.send_keys(base64.b64decode(self.password).decode('utf-8'))
         ele_pwd.send_keys(Keys.ENTER)
+        
+        # After Loggin browser loads my.noip.com page - give him some time to load
+        # 'noip-cart' element is near the end of html, so html have been loaded
+        try:
+            elem = WebDriverWait(self.browser, 10).until( EC.presence_of_element_located((By.ID, "noip-cart")))
+        except:
+            raise Exception("my.noip.com page could not load")        
+
         if self.debug > 1:
-            time.sleep(1)
+#            time.sleep(1)
             self.browser.save_screenshot("debug2.png")
 
     def update_hosts(self):
         count = 0
 
         self.open_hosts_page()
-        time.sleep(1)
+        self.browser.implicitly_wait(1)
+#        time.sleep(1)
         iteration = 1
         next_renewal = []
 
@@ -124,7 +145,8 @@ class Robot:
     def update_host(self, host_button, host_name):
         self.logger.log(f"Updating {host_name}")
         host_button.click()
-        time.sleep(3)
+        self.browser.implicitly_wait(3)
+#        time.sleep(3)
         intervention = False
         try:
             if self.browser.find_elements(By.XPATH, "//h2[@class='big']")[0].text == "Upgrade Now":
