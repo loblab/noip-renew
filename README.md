@@ -9,9 +9,7 @@ using Python/Selenium with Chrome headless mode.
 NOTE: this is an up-to-date fork of loblab/noip-renew repository as it seems it's not anymore actively developed, I'll try to keep this fork up to date and working as much as possible. Feel free to contribute!
 
 - Platform: Debian/Ubuntu/Raspbian/Arch Linux, no GUI needed (tested on Debian 9.x/10.x/Arch Linux); python 3.6+
-- Ver: 1.5
 - Ref: [Technical explanation for the code (Chinese)](http://www.jianshu.com/p/3c8196175147)
-- Updated: 11/23/2021
 - Created: 11/04/2017
 - Original Author: loblab
 - Fork Mantainer: neothematrix
@@ -46,21 +44,3 @@ The script is not designed to renew/update the dynamic DNS records, but only to 
 Check [noip.com documentation](https://www.noip.com/integrate) for that purpose.
 Most wireless routers support noip.com. For more information, check [here](https://www.noip.com/support/knowledgebase/what-devices-support-no-ips-dynamic-dns-update-service/).
 You can also check [DNS-O-Matic](https://dnsomatic.com/) to update multiple noip.com DNS records.
-
-If you need notification functionality, please try [IDemixI's branch](https://github.com/IDemixI/noip-renew/tree/notifications). - OUTDATED
-
-## History
-- 1.5 (11/23/2021): Created this fork and merged all pull requests making the script working again.
-- 1.2 (01/02/2021): Merged all pull requests in latest months: make it work for updated noip.com site.
-- 1.1 (06/05/2020): Fixed error when attempting to update an expired host.
-- 1.0 (05/18/2020): Minor fixes to an xpath & a try catch pass to avoid an exception. Also fixed versioning.
-- 1.0 (04/16/2020): Catches "Would you like to upgrade?" page & stops script accordingly. Manual intervention still required.
-- 0.9 (04/13/2020): Complete refactor of code, more stability & automatic crontab scheduling.
-- 0.8 (03/23/2020): Added menu to repair/install/remove script along with ability to update noip.com details.
-- 0.7 (03/21/2020): Code tidyup and improved efficiency (Removed number of hosts and automatically get this)
-- 0.6 (03/15/2020): Improved support for Raspberry Pi (Raspbian Buster) & Changes to setup script.
-- 0.5 (01/05/2020): Support raspberry pi, try different "chromedriver" packages in setup script.
-- 0.4 (01/14/2019): Add num_hosts argument, change for button renaming; support user agent.
-- 0.3 (05/19/2018): Support Docker, ignore timeout, support proxy, tested on python3.
-- 0.2 (11/12/2017): Deploy the script as normal user only. root user with 'no-sandbox' option is not safe for Chrome.
-- 0.1 (11/05/2017): Support Debian with Chrome headless.
