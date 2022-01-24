@@ -73,7 +73,7 @@ class Robot:
         self.browser.get(Robot.LOGIN_URL)
         
         try:
-            elem = WebDriverWait(self.browser, 10).until( EC.presence_of_element_located((By.ID, "signup-wrap")))
+            elem = WebDriverWait(self.browser, 10).until( EC.presence_of_element_located((By.ID, "content")))
         except:
             raise Exception("Login page could not be loaded")
             
