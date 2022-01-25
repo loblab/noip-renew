@@ -81,15 +81,13 @@ class Robot:
             self.browser.save_screenshot("debug1.png")
 
         self.logger.log("Logging in...")
-#        ele_usr = self.browser.find_element(By.XPATH, "//form[@id='clogs']/input[@name='username']")
-#        ele_pwd = self.browser.find_element(By.XPATH, "//form[@id='clogs']/input[@name='password']")
         
         ele_usr = elem.find_element(By.NAME, "username")
         ele_pwd = elem.find_element(By.NAME, "password")
         
         ele_usr.send_keys(self.username)
         ele_pwd.send_keys(base64.b64decode(self.password).decode('utf-8'))
-        ele_pwd.send_keys(Keys.ENTER)
+        self.browser.find_element(By.XPATH, "//form[@id='clogs']/button[@type='submit']").click()
         
         # After Loggin browser loads my.noip.com page - give him some time to load
         # 'noip-cart' element is near the end of html, so html have been loaded
@@ -99,7 +97,6 @@ class Robot:
             raise Exception("my.noip.com page could not load")        
 
         if self.debug > 1:
-#            time.sleep(1)
             self.browser.save_screenshot("debug2.png")
 
     def update_hosts(self):
@@ -107,7 +104,6 @@ class Robot:
 
         self.open_hosts_page()
         self.browser.implicitly_wait(1)
-#        time.sleep(1)
         iteration = 1
         next_renewal = []
 
@@ -151,7 +147,6 @@ class Robot:
         self.logger.log(f"Updating {host_name}")
         host_button.click()
         self.browser.implicitly_wait(3)
-#        time.sleep(3)
         intervention = False
         try:
             if self.browser.find_elements(By.XPATH, "//h2[@class='big']")[0].text == "Upgrade Now":
