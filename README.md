@@ -17,6 +17,13 @@ NOTE: this is an up-to-date fork of loblab/noip-renew repository as it seems it'
 
 ![noip.com hosts](https://raw.githubusercontent.com/loblab/noip-renew/master/screenshot.png)
 
+## Prerequisites
+
+ChromeDriver is required for the script to interface with noip.com from within the script.
+ChromeDriver must be maintained to match the installed version of Chrome.
+There is no automated repository that provides ChromeDriver package beyond Ubuntu 18 LTS.
+Installing Chromium via Snap and then linking chromedriver to /usr/bin/chromedriver should keep chromediver sufficiently up to date without manual intervention
+
 ## Usage
 
 1. Clone this repository to the device you will be running it from. (`git clone https://github.com/neothematrix/noip-renew.git`)
