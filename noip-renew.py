@@ -90,9 +90,9 @@ class Robot:
         ele_pwd.send_keys(Keys.ENTER)
         
         # After Loggin browser loads my.noip.com page - give him some time to load
-        # 'noip-cart' element is near the end of html, so html have been loaded
+        # 'free-callout' element is near the end of html, so html have been loaded
         try:
-            elem = WebDriverWait(self.browser, 10).until( EC.presence_of_element_located((By.ID, "noip-cart")))
+            elem = WebDriverWait(self.browser, 10).until( EC.presence_of_element_located((By.ID, "free-callout")))
         except:
             raise Exception("my.noip.com page could not load")        
 
