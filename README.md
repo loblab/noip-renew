@@ -44,6 +44,7 @@ my_password='add base64 encoded password here'
 debug_lvl=2
 echo -e "$(crontab -l)"$'\n'"12  3  *  *  1,3,5  docker run --rm --network host moebiuss/noip-renew ${my_username} ${my_password} ${debug_lvl}" | crontab -
 ```
+NOTE: with newer versions of ChromeDriver (>v99) you might need to increase the shm size of the container otherwise ChromeDriver will crash and throw an exception. To do it, you can just add the "--shm-size="512m" flag to the docker run command.
 
 ## Remarks
 
