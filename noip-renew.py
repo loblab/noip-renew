@@ -43,7 +43,7 @@ class Robot:
 
     USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:64.0) Gecko/20100101 Firefox/64.0"
     LOGIN_URL = "https://www.noip.com/login"
-    HOST_URL = "https://www.noip.com/redirect/mynoip?force=true&intended=dynamic-dns"
+    HOST_URL = "https://my.noip.com/dynamic-dns"
 
     def __init__(self, username, password, debug):
         self.debug = debug
@@ -90,9 +90,9 @@ class Robot:
         ele_pwd.send_keys(Keys.ENTER)
         
         # After Loggin browser loads my.noip.com page - give him some time to load
-        # 'free-callout' element is near the end of html, so html have been loaded
+        # 'noip-cart' element is near the end of html, so html have been loaded
         try:
-            elem = WebDriverWait(self.browser, 10).until( EC.presence_of_element_located((By.ID, "free-callout")))
+            elem = WebDriverWait(self.browser, 10).until( EC.presence_of_element_located((By.ID, "noip-cart")))
         except:
             raise Exception("my.noip.com page could not load")        
 
