@@ -48,6 +48,16 @@ function install_arch(){
 
 function install_debian(){
     echo "Installing necessary packages..."
+        deb_arch=$(dpkg --print-architecture)
+        if [ "$deb_arch" == "amd64" ]; then
+            wget=/usr/bin/wget
+            if [ ! -x "$wget" ]; then
+              $SUDO apt -y install wget
+            fi
+            echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
+            wget -O- https://dl.google.com/linux/linux_signing_key.pub |gpg --dearmor > /etc/apt/trusted.gpg.d/google.gpg
+        fi
+
         read -p 'Perform apt-get update? (y/n): ' update
         if [ "${update^^}" = "Y" ]
         then
@@ -67,7 +77,9 @@ function install_debian(){
             $SUDO apt-get -y install python3
         fi
 
-        $SUDO apt -y install chromium-browser # Update Chromium Browser or script won't work.
+        $SUDO apt -y install chromium-browser || \
+        $SUDO apt -y install chromium # Update Chromium Browser or script won't work.
+        
         $SUDO apt -y install $PYTHON-pip
 }
 
