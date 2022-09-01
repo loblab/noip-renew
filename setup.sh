@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+source /etc/os-release
+
 PYTHON=python3
 USER=$(whoami)
 if [ "$USER" == "root" ]; then
@@ -24,16 +26,19 @@ function config() {
 }
 
 function install() {
-    OS=$(hostnamectl | grep -i "operating system")
-    echo "$OS"
-    case $OS in
-        *Arch?Linux*)
-            install_arch
-            ;;
-        *)
-            install_debian
-            ;;
-    esac
+    if [[ "$ID_LIKE" == *"rhel"* ]]; then
+        install_redhat
+    if [[ "rhel centos fedora" == *"$ID"* ]]; then
+        install_redhat
+    elif [[ "$ID_LIKE" == *"arch"* ]]; then
+        install_arch
+    elif [[ "$ID" == "arch" ]]; then
+        install_arch
+    elif [[ "$ID_LIKE" == *"debian"* ]]; then
+        install_debian
+    elif [[ "$ID" == "debian"]]; then
+        install_debian
+    fi
     # Debian9 package 'python-selenium' does not work with chromedriver,
     # Install from pip, which is newer
     $SUDO $PYTHON -m pip install selenium
@@ -44,6 +49,21 @@ function install_arch(){
     $SUDO pacman -Qi python > /dev/null ||  $SUDO pacman -S python
     $SUDO pacman -Qi python-pip > /dev/null ||  $SUDO pacman -S python-pip
     $SUDO pacman -Qi chromium > /dev/null || $SUDO pacman -S chromium
+}
+
+function install_redhat(){
+    echo "Installing necessary packages..."
+    epelresult=$($SUDO dnf repolist | grep epel)
+    if [[ "$epelresult" == "epel"* ]]; then
+        echo "EPEL installed, skipping..."
+    else
+        echo "Adding EPEL Repository..."
+        $SUDO dnf -y check-update
+        $SUDO dnf -y config-manager --set-enabled crb
+        $SUDO dnf -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-$(echo ${VERSION_ID} | cut -d '.' -f -1).noarch.rpm
+    fi
+
+    $SUDO dnf -y install chromedriver chromium python3-pip
 }
 
 function install_debian(){
