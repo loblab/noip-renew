@@ -190,6 +190,8 @@ class Robot:
 
     def run(self):
         rc = 0
+        version = "1.6.1"
+        self.logger.log(f"No-IP renew script version {version}")
         self.logger.log(f"Debug level: {self.debug}")
         try:
             self.login()
