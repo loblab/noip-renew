@@ -2,6 +2,7 @@
 set -e
 
 PYTHON=python3
+PYTHON35=false
 USER=$(whoami)
 if [ "$USER" == "root" ]; then
     USER=$1
@@ -37,6 +38,9 @@ function install() {
     # Debian9 package 'python-selenium' does not work with chromedriver,
     # Install from pip, which is newer
     $SUDO $PYTHON -m pip install selenium
+    if [ "$PYTHON35" = true ]; then
+        $SUDO $PYTHON -m pip install future-fstrings
+    fi
 }
 
 function install_arch(){
@@ -71,10 +75,13 @@ function install_debian(){
         $SUDO apt -y install cron 
 
         PYV=`python3 -c "import sys;t='{v[0]}{v[1]}'.format(v=list(sys.version_info[:2]));sys.stdout.write(t)";`
-        if [[ "$PYV" -lt "36" ]] || ! hash python3;
-        then
-            echo "This script requires Python version 3.6 or higher. Attempting to install..."
-            $SUDO apt-get -y install python3
+        if [[ "$PYV" -lt "36" ]] || ! hash python3; then
+            if [[ "$PYV" -eq "35" ]]; then
+                PYTHON35=true
+            else
+                echo "This script requires Python version 3.5 or higher. Attempting to install..."
+                $SUDO apt-get -y install python3
+            fi
         fi
 
         $SUDO apt -y install chromium-browser || \
@@ -99,6 +106,11 @@ function deploy() {
     $SUDO chown $USER $INSTEXE
     $SUDO chown $USER $INSTDIR/noip-renew-skd.sh
     $SUDO chmod 700 $INSTEXE
+    
+    if [ "$PYTHON35" = true ]; then
+        $SUDO sed -i '2i # -*- coding: future_fstrings -*- ' $INSTDIR/noip-renew.py
+    fi
+    
     noip
     $SUDO crontab -u $USER -l | grep -v '/noip-renew*'  | $SUDO crontab -u $USER -
     ($SUDO crontab -u $USER -l; echo "$CRONJOB") | $SUDO crontab -u $USER -
