@@ -8,7 +8,7 @@ using Python/Selenium with Chrome headless mode.
 
 NOTE: this is an up-to-date fork of loblab/noip-renew repository as it seems it's not anymore actively developed, I'll try to keep this fork up to date and working as much as possible. Feel free to contribute!
 
-- Platform: Debian/Ubuntu/Raspbian/Arch Linux, no GUI needed (tested on Debian 9.x/10.x/Arch Linux); python 3.6+
+- Platform: Debian/Ubuntu/Raspbian/Arch Linux, no GUI needed (tested on Debian 9.x/10.x/Arch Linux); python 3.5+
 - Ref: [Technical explanation for the code (Chinese)](http://www.jianshu.com/p/3c8196175147)
 - Created: 11/04/2017
 - Original Author: loblab
