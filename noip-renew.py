@@ -103,17 +103,17 @@ class Robot:
         count = 0
 
         self.open_hosts_page()
-        self.browser.implicitly_wait(1)
+        self.browser.implicitly_wait(5)
         iteration = 1
         next_renewal = []
 
         hosts = self.get_hosts()
         for host in hosts:
             host_link = self.get_host_link(host, iteration) # This is for if we wanted to modify our Host IP.
-            host_button = self.get_host_button(host, iteration) # This is the button to confirm our free host
             host_name = host_link.text
             expiration_days = self.get_host_expiration_days(host, iteration)
             if expiration_days <= 7:
+                host_button = self.get_host_button(host, iteration) # This is the button to confirm our free host
                 self.update_host(host_button, host_name)
                 expiration_days = self.get_host_expiration_days(host, iteration)
                 next_renewal.append(expiration_days)
@@ -180,7 +180,7 @@ class Robot:
 
     @staticmethod
     def get_host_button(host, iteration):
-        return host.find_element(By.XPATH, ".//following-sibling::td[4]/button[contains(@class, 'btn')]")
+        return host.find_element(By.XPATH, ".//following-sibling::td[4]/button[contains(@class, 'btn')]")        
 
     def get_hosts(self):
         host_tds = self.browser.find_elements(By.XPATH, "//td[@data-title=\"Host\"]")
@@ -190,7 +190,7 @@ class Robot:
 
     def run(self):
         rc = 0
-        version = "1.6.1"
+        version = "1.7.0"
         self.logger.log(f"No-IP renew script version {version}")
         self.logger.log(f"Debug level: {self.debug}")
         try:
