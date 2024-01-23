@@ -180,7 +180,7 @@ class Robot:
 
     @staticmethod
     def get_host_button(host, iteration):
-        return host.find_element(By.XPATH, ".//following-sibling::td[4]/button[contains(@class, 'btn')]")        
+        return host.find_element(By.XPATH, "//td[6]/button[contains(@class, 'btn-success')]")
 
     def get_hosts(self):
         host_tds = self.browser.find_elements(By.XPATH, "//td[@data-title=\"Host\"]")
@@ -190,7 +190,7 @@ class Robot:
 
     def run(self):
         rc = 0
-        version = "1.7.0"
+        version = "1.7.1"
         self.logger.log(f"No-IP renew script version {version}")
         self.logger.log(f"Debug level: {self.debug}")
         try:
