@@ -30,7 +30,8 @@ Installing Chromium via Snap and then linking chromedriver to /usr/bin/chromedri
 
 1. Clone this repository to the device you will be running it from. (`git clone https://github.com/neothematrix/noip-renew.git`)
 2. Run setup.sh and set your noip.com account information,
-3. Run noip-renew-USERNAME command.
+3. If you want to use randomized cronjob answer y to the question and give time interval hours, i.e. 7-18 (for instance). This will give a window from 7:00 to 18:59; Take into account it is possible script to try to run on days on which Daylight Saving Time (DST) occurs (if you have such thing in your country), so avoid hours in which this event occurs, otherwise the scrippt may not run. For instance in Europe DST events are last Sundays of March and October at 3AM (March) or 4AM (October). Script probably will not run on the DST day in March if scheduled between 3 and 4 AM. It is too complicated to incorporate such logic, but if someone would like then try.
+4. Run noip-renew-USERNAME command.
 
 Check confirmed records from multiple log files:
 
