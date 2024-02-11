@@ -130,6 +130,14 @@ function noip() {
 
     $SUDO sed -i 's/USERNAME=".*"/USERNAME="'$uservar'"/1' $INSTEXE
     $SUDO sed -i 's/PASSWORD=".*"/PASSWORD="'$passvar'"/1' $INSTEXE
+
+    read -p 'Do you want randimzed cronjob? (y/n): ' rcron
+    if [ "${rcron^^}" = "Y" ]
+    then
+        read -p 'Enter time interval (hours): ' tint
+        $SUDO sed -i '2 c Min=$(/usr/bin/shuf -i 0-59 -n 1)' $INSTDIR/noip-renew-skd.sh
+        $SUDO sed -i '3 c Hour=$(/usr/bin/shuf -i '$tint' -n 1)' $INSTDIR/noip-renew-skd.sh
+    fi
 }
 
 function installer() {
