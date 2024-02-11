@@ -10,12 +10,12 @@ NOTE: this is an up-to-date fork of loblab/noip-renew repository as it seems it'
 
 - Platform: Debian/Ubuntu/Raspbian/Arch Linux, no GUI needed (tested on Debian 9.x/10.x/11.x/Arch Linux); python 3.5+
 - Chrome webdriver - tested up to version 120.0.6099.102-rpt1
-- Selenium - v.3.x (python 3.5+); v. 4.0.0 (python 3.7+); v.4.10.0 (python 3.8+); The script will not work with v. 4.11.0 and above
+- Selenium - v.3.x (python 3.5+); v. 4.0.0 (python 3.7+); v.4.10.0 and above (python 3.8+); Tested up to v. 4.17.2
 - Ref: [Technical explanation for the code (Chinese)](http://www.jianshu.com/p/3c8196175147)
 - Created: 11/04/2017
 - Original Author: loblab
 - Fork Mantainer: neothematrix
-- Contributors: [IDemixI](https://github.com/IDemixI), [Angel0ffDeath](https://github.com/Angel0ffDeath), [benyjr](https://github.com/benyjr)
+- Contributors: [Angel0ffDeath](https://github.com/Angel0ffDeath), [benyjr](https://github.com/benyjr)
 
 ![noip.com hosts](https://raw.githubusercontent.com/loblab/noip-renew/master/screenshot.png)
 
