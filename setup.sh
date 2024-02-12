@@ -131,7 +131,7 @@ function noip() {
     $SUDO sed -i 's/USERNAME=".*"/USERNAME="'$uservar'"/1' $INSTEXE
     $SUDO sed -i 's/PASSWORD=".*"/PASSWORD="'$passvar'"/1' $INSTEXE
 
-    read -p 'Do you want randimzed cronjob? (y/n): ' rcron
+    read -p 'Do you want randomized cronjob? (y/n): ' rcron
     if [ "${rcron^^}" = "Y" ]
     then
         read -p 'Enter time interval (hours): ' tint
