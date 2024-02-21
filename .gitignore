@@ -99,6 +99,12 @@ ENV/
 
 # mypy
 .mypy_cache/
-debug1.png
-debug2.png
+
+.bash_history
+.pki
+.wget-hsts
+*success.png
+exception.png
+debug*.png
 results.png
+vps_mon.py

@@ -13,7 +13,7 @@ RUN apt-get -y install chromium-chromedriver || \
     apt-get -y install chromium-driver || \
     apt-get -y install chromedriver
 RUN apt-get -y install ${PYTHON}-pip
-RUN $PYTHON -m pip install selenium
+RUN apt-get -y install ${PYTHON}-selenium
 RUN apt-get -y install curl wget
 
 RUN mkdir -p /home/loblab && \

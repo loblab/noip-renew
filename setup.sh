@@ -2,6 +2,7 @@
 set -e
 
 PYTHON=python3
+PYTHON35=false
 USER=$(whoami)
 if [ "$USER" == "root" ]; then
     USER=$1
@@ -20,7 +21,7 @@ function config() {
     LOGDIR=/var/log/noip-renew/$USER
     INSTDIR=/usr/local/bin
     INSTEXE=$INSTDIR/noip-renew-$USER.sh
-    CRONJOB="0 1    * * *   $USER    $INSTEXE $LOGDIR"
+    CRONJOB="0 1    * * *   $INSTEXE $LOGDIR"
 }
 
 function install() {
@@ -37,6 +38,9 @@ function install() {
     # Debian9 package 'python-selenium' does not work with chromedriver,
     # Install from pip, which is newer
     $SUDO $PYTHON -m pip install selenium
+    if [ "$PYTHON35" = true ]; then
+        $SUDO $PYTHON -m pip install future-fstrings
+    fi
 }
 
 function install_arch(){
@@ -48,6 +52,16 @@ function install_arch(){
 
 function install_debian(){
     echo "Installing necessary packages..."
+        deb_arch=$(dpkg --print-architecture)
+        if [ "$deb_arch" == "amd64" ]; then
+            wget=/usr/bin/wget
+            if [ ! -x "$wget" ]; then
+              $SUDO apt -y install wget
+            fi
+            $SUDO sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+            $SUDO sh -c 'wget -O- https://dl.google.com/linux/linux_signing_key.pub |gpg --dearmor > /etc/apt/trusted.gpg.d/google.gpg'
+        fi
+
         read -p 'Perform apt-get update? (y/n): ' update
         if [ "${update^^}" = "Y" ]
         then
@@ -61,13 +75,18 @@ function install_debian(){
         $SUDO apt -y install cron 
 
         PYV=`python3 -c "import sys;t='{v[0]}{v[1]}'.format(v=list(sys.version_info[:2]));sys.stdout.write(t)";`
-        if [[ "$PYV" -lt "36" ]] || ! hash python3;
-        then
-            echo "This script requires Python version 3.6 or higher. Attempting to install..."
-            $SUDO apt-get -y install python3
+        if [[ "$PYV" -lt "36" ]] || ! hash python3; then
+            if [[ "$PYV" -eq "35" ]]; then
+                PYTHON35=true
+            else
+                echo "This script requires Python version 3.5 or higher. Attempting to install..."
+                $SUDO apt-get -y install python3
+            fi
         fi
 
-        $SUDO apt -y install chromium-browser # Update Chromium Browser or script won't work.
+        $SUDO apt -y install chromium-browser || \
+        $SUDO apt -y install chromium # Update Chromium Browser or script won't work.
+        
         $SUDO apt -y install $PYTHON-pip
 }
 
@@ -87,6 +106,11 @@ function deploy() {
     $SUDO chown $USER $INSTEXE
     $SUDO chown $USER $INSTDIR/noip-renew-skd.sh
     $SUDO chmod 700 $INSTEXE
+    
+    if [ "$PYTHON35" = true ]; then
+        $SUDO sed -i '2i # -*- coding: future_fstrings -*- ' $INSTDIR/noip-renew.py
+    fi
+    
     noip
     $SUDO crontab -u $USER -l | grep -v '/noip-renew*'  | $SUDO crontab -u $USER -
     ($SUDO crontab -u $USER -l; echo "$CRONJOB") | $SUDO crontab -u $USER -
@@ -106,6 +130,14 @@ function noip() {
 
     $SUDO sed -i 's/USERNAME=".*"/USERNAME="'$uservar'"/1' $INSTEXE
     $SUDO sed -i 's/PASSWORD=".*"/PASSWORD="'$passvar'"/1' $INSTEXE
+
+    read -p 'Do you want randomized cronjob? (y/n): ' rcron
+    if [ "${rcron^^}" = "Y" ]
+    then
+        read -p 'Enter time interval (hours): ' tint
+        $SUDO sed -i '2 c Min=$(/usr/bin/shuf -i 0-59 -n 1)' $INSTDIR/noip-renew-skd.sh
+        $SUDO sed -i '3 c Hour=$(/usr/bin/shuf -i '$tint' -n 1)' $INSTDIR/noip-renew-skd.sh
+    fi
 }
 
 function installer() {
@@ -121,6 +153,7 @@ function uninstall() {
     if [ "${clearLogs^^}" = "Y" ]
     then
       $SUDO rm -rf $LOGDIR
+      $SUDO crontab -u $USER -l | grep -v '/noip-renew*'  | $SUDO crontab -u $USER -
     fi
 }
 
